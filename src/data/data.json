@@ -1,0 +1,32 @@
+[{
+    "id": 1,
+    "plato": "Steak Pimienta",
+    "categoria": "Huevos al Gusto",
+    "descripcion": "Huevos acompañados de arepa, pan, frutas frescas de temporada",
+    "precio": 20000
+  }, {
+    "id": 2,
+    "plato": "Sándwich de Jamón con queso",
+    "categoria": "Huevos al Gusto",
+    "descripcion": "2 sándwich de jamón con queso mozzarella. Acompañados de...",
+    "precio": 20000
+  }, {
+    "id": 3,
+    "plato": "Baby Beef",
+    "categoria": "Carnes",
+    "descripcion": "250gr de lomo fino picado con tocineta sazonado con...",
+    "precio": 3966
+  }, {
+    "id": 4,
+    "plato": "Filet Mignon",
+    "categoria": "Carnes",
+    "descripcion": "250gr de lomo fino picado con tocineta sazonado con...",
+    "precio": 5981
+  }, {
+    "id": 5,
+    "plato": "Steak Pimienta",
+    "categoria": "Carnes",
+    "descripcion": "250gr de lomo fino picado en una base de caldo de carne...",
+    "precio": 9740
+  }
+]
