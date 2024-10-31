@@ -8,6 +8,9 @@ export default {
     extend: {
       fontFamily: {
         "montserrat": ['Montserrat', 'sans-serif']
+      },
+      boxShadow: {
+        "superior": '0 -4px 20px 0px rgba(0, 0, 0, 0.3)',
       }
     },
   },
@@ -23,9 +26,9 @@ export default {
           "secondary": "#ffffff",
           "accent": "#331c54",
           "neutral": "#4f0b7b",
-          "base-100": "#4f0b7b",
+          "base-100": "#331c54",
           "info": "#00ffff",
-          "success": "#00b500",
+          "success": "#331c54",
           "warning": "#cd6a00",
           "error": "#cf0042",
         },

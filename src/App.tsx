@@ -2,6 +2,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Testing from './components/Testing';
+import MenuContainer from './components/MenuContainer';
 
 function App() {
 
@@ -12,13 +13,14 @@ function App() {
   // neutral: morado claro
 
   return (
-    <div>
+    <div className=''>
       <BrowserRouter>
 
 
 
         <Routes>
-            <Route path='/' element={<Testing />} />
+            {/* <Route path='/' element={<Testing />} /> */}
+            <Route path='/' element={<MenuContainer />} />
         </Routes>
       </BrowserRouter>
     </div>
