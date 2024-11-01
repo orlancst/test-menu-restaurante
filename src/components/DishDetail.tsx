@@ -1,8 +1,19 @@
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 
-const DishDetail: React.FC = () => {
+export interface DishDetailDrawer {
+    toggleDrawer(): void;
+}
+
+const DishDetail: React.FC = forwardRef<DishDetailDrawer, {}>((props, ref) => {
+
+    useImperativeHandle(ref, () => {
+        return {
+            toggleDrawer: toggleDrawer
+        }
+    })
+
 
     const [isOpen, setIsOpen] = useState(false);
     const toggleDrawer = () => {
@@ -54,6 +65,6 @@ const DishDetail: React.FC = () => {
             </Drawer>
         </>
     )
-}
+})
 
 export default DishDetail
