@@ -5,3 +5,7 @@ export interface Plato {
     descripcion: string;
     precio: number;
 }
+
+export interface Platos {
+    products: Plato[];
+}

@@ -1,32 +1,28 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import {useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 
-export interface DishDetailDrawer {
-    toggleDrawer(): void;
+interface DrawerProps {
+    idProd: number;
+    isOpen: boolean;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DishDetail: React.FC = forwardRef<DishDetailDrawer, {}>((props, ref) => {
+const DishDetail: React.FC<DrawerProps> = (props) => {
 
-    useImperativeHandle(ref, () => {
-        return {
-            toggleDrawer: toggleDrawer
-        }
-    })
+    const {idProd, isOpen, setIsOpen} = props
 
-
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleDrawer = () => {
-        setIsOpen((prevState) => !prevState)
+    const closeDrawer = () => {
+        setIsOpen(false);
     }
 
 
     return (
         <>
-            <button onClick={toggleDrawer} className='btn'>Show</button>
+            {/* <button onClick={toggleDrawer} className='btn'>Show</button> */}
             <Drawer
                 open={isOpen}
-                onClose={toggleDrawer}
+                onClose={closeDrawer}
                 direction='bottom'
                 className='bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior font-montserrat'
                 style={{
@@ -36,7 +32,7 @@ const DishDetail: React.FC = forwardRef<DishDetailDrawer, {}>((props, ref) => {
                 lockBackgroundScroll
             >
                 <div className='flex flex-col'>
-                    <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={toggleDrawer}>✕</button>
+                    <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={closeDrawer}>✕</button>
 
                     <h3 className='font-semibold text-xl mt-3 text-secondary'>Steak Pimienta</h3>
                     <p className='text-secondary text-xs leading-4 mt-2'>
@@ -65,6 +61,6 @@ const DishDetail: React.FC = forwardRef<DishDetailDrawer, {}>((props, ref) => {
             </Drawer>
         </>
     )
-})
+}
 
 export default DishDetail

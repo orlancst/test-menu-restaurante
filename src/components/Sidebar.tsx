@@ -1,30 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { askForData } from "../helpers/getExampleData";
-import { Plato } from "../types";
+import { Platos } from '../types';
 
-
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<Platos> = ({products}) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const toggleSidebarDrawer = () => {
         setIsSidebarOpen((prevState) => !prevState)
     }
 
-    const [prods, setProds] = useState<Plato[]>([]);
-
-    useEffect(() => {
-        askForData()
-            .then((res) => {
-                setProds(res)
-            })
-    }, [])
-
-    const categories = [...new Set(prods.map(prod => prod.categoria))]
+    const categories = [...new Set(products.map(prod => prod.categoria))]
 
     const categoryCount = categories.map(category => {
-        const count = prods.filter(prod => prod.categoria === category).length
+        const count = products.filter(prod => prod.categoria === category).length
 
         return { category, cant: count }
     })
