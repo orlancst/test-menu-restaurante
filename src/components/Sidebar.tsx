@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { Platos } from '../types';
+import { SidebarProps } from '../types';
 
-const Sidebar: React.FC<Platos> = ({products}) => {
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const toggleSidebarDrawer = () => {
-        setIsSidebarOpen((prevState) => !prevState)
+const Sidebar: React.FC<SidebarProps> = ({ products, isSidebarOpened, setIsSidebarOpened }) => {
+
+    const closeSidebar = () => {
+        setIsSidebarOpened(false);
     }
 
     const categories = [...new Set(products.map(prod => prod.categoria))]
@@ -18,12 +18,22 @@ const Sidebar: React.FC<Platos> = ({products}) => {
         return { category, cant: count }
     })
 
+    const handleScrollToSection = (scrollCategory: string) => {
+        
+        const section = document.getElementById(`#${scrollCategory}`)
+
+        if (section) {
+            closeSidebar()
+            section.scrollIntoView({ behavior:'smooth' })
+        }
+        
+    }
+
     return (
         <div>
-            <button className='btn' onClick={toggleSidebarDrawer}>Sidebar</button>
             <Drawer
-                open={isSidebarOpen}
-                onClose={toggleSidebarDrawer}
+                open={isSidebarOpened}
+                onClose={closeSidebar}
                 direction='left'
                 className='bg-neutral py-5 rounded-tr-xl border-t-1 border-t-black shadow-superior font-montserrat'
                 style={{
@@ -33,14 +43,14 @@ const Sidebar: React.FC<Platos> = ({products}) => {
                 lockBackgroundScroll
             >
                 <div className='flex flex-col'>
-                    <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={toggleSidebarDrawer}>✕</button>
+                    <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={closeSidebar}>✕</button>
 
                     <h2 className='text-center font-bold text-secondary mt-4 mb-2'>Categorias</h2>
                     <hr className='h-0 border-t-1' />
 
                     {
                         categoryCount.map(cat => (
-                            <div key={cat.category} className='flex flex-col p-4 border-b border-b-secondary text-secondary'>
+                            <div key={cat.category} onClick={() => handleScrollToSection(`${cat.category.replace(/ /g, "_").toLocaleLowerCase()}`)} className='flex flex-col p-4 border-b border-b-secondary text-secondary'>
                                 <h3 className='font-semibold uppercase'>{cat.category}</h3>
                                 <p className='text-sm'>{cat.cant} producto{cat.cant !== 1 ? 's' : ''}</p>
                             </div>

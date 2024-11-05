@@ -1,7 +1,8 @@
 import React from "react"
 import MenuIcon from "../assets/svg/MenuIcon"
+import { NavbarProps } from "../types"
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
 
 
@@ -9,7 +10,7 @@ const Navbar: React.FC = () => {
         <div className="flex flex-row mx-4 gap-x-0 py-3">
             <div className="basis-1/3 border-t-2 border-b-2 flex items-center">
 
-                <button onClick={() => {}}>
+                <button onClick={toggleSidebar}>
                     <MenuIcon fillColor="#ff5800" />
                 </button>
             </div>

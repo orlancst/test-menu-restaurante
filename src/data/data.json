@@ -40,5 +40,17 @@
     "categoria": "Aves",
     "descripcion": "300 gr de pechuga de pollo sazonada con sal, pimienta y especias al gusto bañada en salsa de champiñones. Acompañado de ensalada del chef y papas a la francesa o patacones.",
     "precio": 30000
+  }, {
+    "id": 8,
+    "plato": "Porción de Patacón",
+    "categoria": "Adicionales",
+    "descripcion": "250 gr de deliciosas y crujientes porciones de plátano verde frito, un sabor caribeño inigualable.",
+    "precio": 6000
+  }, {
+    "id": 9,
+    "plato": "Porción de Papas a la Francesa",
+    "categoria": "Adicionales",
+    "descripcion": "250 gr de crujientes y doradas papas fritas.",
+    "precio": 7000
   }
 ]

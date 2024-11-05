@@ -12,13 +12,10 @@ const MenuContainer: React.FC = () => {
 
 
     const [prods, setProds] = useState<Plato[]>([]);
-    const [idProd, setIdProd] = useState(0)
+    const [idProd, setIdProd] = useState(1)
 
-    const [isOpen, setIsOpen] = useState(false);
-    // const toggleDrawer = () => {
-    //     setIsOpen(true);
-    // }
-
+    const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
+    const [isSidebarOpened, setIsSidebarOpened] = useState(false);
 
     useEffect(() => {
         askForData()
@@ -27,15 +24,19 @@ const MenuContainer: React.FC = () => {
             })
     }, [prods])
 
-    const handleOpenDishDetail = (id: number) => (event: React.MouseEvent<HTMLHeadingElement>) => {
+    const handleOpenDishDetail = (id: number) => () => {
         setIdProd(id);
-        setIsOpen(true);
+        setIsDishDetailOpened(true);
+    }
+
+    const handleOpenSidebar = () => {
+        setIsSidebarOpened(!isSidebarOpened)
     }
 
     return (
         <>
             <Header />
-            <Navbar />
+            <Navbar toggleSidebar={handleOpenSidebar} />
             <div className="flex flex-col font-montserrat mx-4 my-3">
                 <div>
 
@@ -43,7 +44,7 @@ const MenuContainer: React.FC = () => {
                         prods.map((prod, index) => {
                             const showCat = index === 0 || prod.categoria !== prods[index - 1].categoria ? true : false;
                             return (
-                                <div key={prod.id}>
+                                <div key={prod.id} id={showCat ? `#${prod.categoria.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                     {
                                         showCat &&
                                         <h3 className="text-3xl uppercase font-bold mb-2 text-primary">{prod.categoria}</h3>
@@ -61,20 +62,12 @@ const MenuContainer: React.FC = () => {
                         })
                     }
 
-
-                    {/* <h3 className="text-3xl uppercase font-bold mb-2 text-primary">Carnes</h3>
-                    <h4 className="text-xl font-semibold text-secondary" onClick={() => {
-                        dishDetailRef.current?.toggleDrawer()
-                    }}>Baby Reef</h4> */}
-
-
-
                 </div>
             </div>
 
             {/* <CartSummary /> */}
-            <DishDetail idProd={idProd} isOpen={isOpen} setIsOpen={setIsOpen} />
-            <Sidebar products={prods} />
+            <DishDetail idProd={idProd} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} />
+            <Sidebar products={prods} isSidebarOpened={isSidebarOpened} setIsSidebarOpened={setIsSidebarOpened} />
 
         </>
     )
