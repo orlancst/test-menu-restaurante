@@ -50,7 +50,7 @@ const MenuContainer: React.FC = () => {
                                         <h3 className="text-3xl uppercase font-bold mb-2 text-primary">{prod.categoria}</h3>
                                     }
                                     <h4 className="text-xl font-semibold text-secondary" onClick={handleOpenDishDetail(prod.id)}>{prod.plato}</h4>
-                                    <p className="text-secondary">{shortenParagraph(prod.descripcion, 50)}</p>
+                                    <p className="text-secondary text-sm">{shortenParagraph(prod.descripcion, 70)}</p>
 
                                     <div className="flex flex-row justify-between mb-3">
                                         <span className="font-semibold text-xl text-secondary">$ {prod.precio.toLocaleString('es-ES')}</span>

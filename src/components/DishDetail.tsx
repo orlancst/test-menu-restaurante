@@ -78,7 +78,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
                     <form action="" className='flex flex-col'>
                         <label htmlFor="dish-comment" className='text-sm text-secondary mb-1'>Comentarios</label>
-                        <textarea name="dish-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-sm p-2'></textarea>
+                        <textarea name="dish-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-xs p-2 focus:outline-none'></textarea>
                     </form>
                     <div className="flex flex-row justify-center gap-x-5 mt-6">
                         <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>

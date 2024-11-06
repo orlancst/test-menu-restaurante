@@ -5,6 +5,8 @@ import Testing from './components/Testing';
 import MenuContainer from './components/MenuContainer';
 import Cart from './components/Cart';
 import Verify from './components/Verify';
+import OrderSummary from './components/OrderSummary';
+import OrderConfirmed from './components/OrderConfirmed';
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
             <Route path='/' element={<MenuContainer />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/verify' element={<Verify />} />
+            <Route path='/order-summary' element={<OrderSummary />} />
+            <Route path='/order-confirmed' element={<OrderConfirmed />} />
         </Routes>
       </BrowserRouter>
     </div>
