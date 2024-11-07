@@ -7,6 +7,7 @@ import Cart from './components/Cart';
 import Verify from './components/Verify';
 import OrderSummary from './components/OrderSummary';
 import OrderConfirmed from './components/OrderConfirmed';
+import { CartProvider } from './context/CartContext';
 
 function App() {
 
@@ -18,17 +19,20 @@ function App() {
 
   return (
     <div className=''>
-      <BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
 
-        <Routes>
+          <Routes>
             {/* <Route path='/' element={<Testing />} /> */}
             <Route path='/' element={<MenuContainer />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/verify' element={<Verify />} />
             <Route path='/order-summary' element={<OrderSummary />} />
             <Route path='/order-confirmed' element={<OrderConfirmed />} />
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+
+      </CartProvider>
     </div>
   )
 }

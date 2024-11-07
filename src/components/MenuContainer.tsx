@@ -3,13 +3,16 @@ import DishDetail from "./DishDetail"
 import Header from "./Header"
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { askForData } from "../helpers/getExampleData";
 import { shortenParagraph } from "../helpers/utils"
 import { Plato } from "../types";
+import { CartContext } from "../context/CartContext"
 
 const MenuContainer: React.FC = () => {
 
+    const { addToCart, cartQuantity } = useContext(CartContext);
+    const isCartEmpty = cartQuantity() > 0 ? false : true;
 
     const [prods, setProds] = useState<Plato[]>([]);
     const [idProd, setIdProd] = useState(1)
@@ -54,7 +57,7 @@ const MenuContainer: React.FC = () => {
 
                                     <div className="flex flex-row justify-between mb-3">
                                         <span className="font-semibold text-xl text-secondary">$ {prod.precio.toLocaleString('es-ES')}</span>
-                                        <button className="w-7 bg-primary text-secondary rounded text-xl">+</button>
+                                        <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => {addToCart(prod, 1, "")}}>+</button>
                                     </div>
                                     <hr className="h-0 border-t-1 mb-4" />
                                 </div>
@@ -64,9 +67,13 @@ const MenuContainer: React.FC = () => {
 
                 </div>
             </div>
+            {
+                !isCartEmpty &&
+                <CartSummary cantidad={cartQuantity()} />
+            }
 
-            {/* <CartSummary /> */}
-            <DishDetail idProd={idProd} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} />
+            
+            <DishDetail idProd={idProd} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} handleAddToCart={addToCart} />
             <Sidebar products={prods} isSidebarOpened={isSidebarOpened} setIsSidebarOpened={setIsSidebarOpened} />
 
         </>

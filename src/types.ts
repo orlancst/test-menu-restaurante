@@ -19,6 +19,11 @@ export interface NavbarProps {
     toggleSidebar: () => void;
 }
 
+export interface UserCart extends Plato {
+    cantidad: number;
+    comentario: string;
+}
+
 // type Dish = {
 //     id: number;
 //     plato: string;
