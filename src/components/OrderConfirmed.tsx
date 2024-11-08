@@ -2,7 +2,7 @@ import { useState } from "react"
 import Survey from "./Survey"
 import ThankYouPage from "./ThankYouPage"
 
-const OrderConfirmed = () => {
+const OrderConfirmed: React.FC = () => {
 
     const [isSurveySubmitted, setIsSurveySubmitted] = useState(false)
 

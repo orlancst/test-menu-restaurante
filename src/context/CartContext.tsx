@@ -7,6 +7,7 @@ interface MiContexto {
     cartQuantity: () => number;
     cartTotalPrice: () => number;
     quantityLimit: number;
+    modifyDishQuantityOnCart: (dishId: number, add: boolean) => void;
 }
 
 interface CartProviderProps {
@@ -19,6 +20,7 @@ export const CartContext = createContext<MiContexto>({
     cartQuantity: () => 0,
     cartTotalPrice: () => 0,
     quantityLimit: 5,
+    modifyDishQuantityOnCart: () => { },
 });
 
 const $cart: UserCart[] = JSON.parse(localStorage.getItem("cart") || '[]') as UserCart[]
@@ -27,12 +29,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     const [cart, setCart] = useState($cart)
 
-    //probablemente esto pueda aumentar o disminuir en un futuro
+    //probablemente este valor puede aumentar o disminuir en un futuro
     const quantityLimit: number = 5
 
     const addToCart = (dish: Plato, cantidad: number, comentario: string, addMore: boolean) => {
 
-        const itemAdded = {...dish, cantidad, comentario}
+        const itemAdded: UserCart = {...dish, cantidad, comentario}
         const newCart = [...cart]
 
         const alreadyAdded = newCart.find((prod) => prod.id === itemAdded.id)
@@ -51,6 +53,34 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         setCart(newCart)
         
+    }
+
+    const modifyDishQuantityOnCart = (dishId: number, add: boolean) => {
+
+        const uCart = [...cart]
+        const auxCart = uCart.find((prod) => prod.id === dishId)
+
+        if (auxCart) {
+            if (add) {
+    
+                if (auxCart.cantidad < quantityLimit) {
+                    auxCart.cantidad ++ ;
+                }
+    
+            } else {
+    
+                if (auxCart.cantidad > 1) {
+                    auxCart.cantidad -- ;
+                } else {
+                    const index = uCart.indexOf(auxCart)
+                    uCart.splice(index, 1)
+                }
+            }
+
+        }
+
+        setCart(uCart)
+
     }
 
     const cartQuantity = () => {
@@ -72,6 +102,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             cartQuantity,
             cartTotalPrice,
             quantityLimit,
+            modifyDishQuantityOnCart,
             }}>
 
             {children}

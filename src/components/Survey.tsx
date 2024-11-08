@@ -16,7 +16,7 @@ const Survey = () => {
                 <label htmlFor="" className="text-secondary font-medium text-sm mb-2">
                     1. ¿Qué tan fácil te resultó utilizar esta herramienta para realizar tu pedido?
                 </label>
-                <div className="flex flex-row mb-3">
+                <div className="flex flex-row mb-5">
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-1" className="radio radio-xs radio-primary mr-2" defaultChecked /> <span className="text-secondary text-xs font-light" >Fácil</span></label>
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-1" className="radio radio-xs radio-primary mr-2" /> <span className="text-secondary text-xs font-light">Difícil</span></label>
                 </div>
@@ -24,7 +24,7 @@ const Survey = () => {
                 <label htmlFor="" className="text-secondary font-medium text-sm mb-2">
                     2. ¿Consideras que la información en el menú es clara y comprensible?
                 </label>
-                <div className="flex flex-row mb-3">
+                <div className="flex flex-row mb-5">
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-2" className="radio radio-xs radio-primary mr-2" defaultChecked /> <span className="text-secondary text-xs font-light">De acuerdo</span></label>
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-2" className="radio radio-xs radio-primary mr-2" /> <span className="text-secondary text-xs font-light">En desacuerdo</span></label>
                 </div>
@@ -32,7 +32,7 @@ const Survey = () => {
                 <label htmlFor="" className="text-secondary font-medium text-sm mb-2">
                     3. ¿Te gustaría usar esta herramienta en lugar de llamar a recepción en el futuro?
                 </label>
-                <div className="flex flex-row mb-3">
+                <div className="flex flex-row mb-5">
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-3" className="radio radio-xs radio-primary mr-2" defaultChecked /> <span className="text-secondary text-xs font-light">Probablemente sí</span></label>
                     <label className="flex items-center w-1/2"><input type="radio" name="radio-3" className="radio radio-xs radio-primary mr-2" /> <span className="text-secondary text-xs font-light">Probablemente no</span></label>
                 </div>

@@ -1,8 +1,18 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import QRHablador from "../assets/svg/QRHablador"
+import { FormEvent, useState } from "react"
 
-const Verify = () => {
+const Verify: React.FC = () => {
+
+    const [inputRoomNumber, setInputRoomNumber] = useState<string>('')
+    const [inputRoomCode, setInputRoomCode] = useState<string>('')
+
+    //esperar a la api para obtener los datos reales...
+    const roomNumber: string = '101'
+    const roomCode: string = '12345'
+
+    const navigate = useNavigate();
 
     const showModalError = () => {
         const modal = document.getElementById('modalInvalidData') as HTMLDialogElement | null
@@ -11,6 +21,18 @@ const Verify = () => {
             modal.showModal()
 
         }
+    }
+
+    const handleCheck = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if (inputRoomNumber!== roomNumber || inputRoomCode!== roomCode) {
+            showModalError()
+            return false
+        }
+
+        navigate('/order-summary');
+        
     }
 
     return (
@@ -23,17 +45,18 @@ const Verify = () => {
             </div>
             <div className='bg-neutral grow flex flex-col items-center'>
 
-                <form action="" className="w-3/4 py-7">
-                    <label htmlFor="" className="uppercase text-sm text-start font-semibold">Ingresa número de habitación</label>
-                    <input type="text" name="" id="" maxLength={3} className="bg-transparent border-b focus:outline-none w-full px-4 mb-3" />
+                <form action="" onSubmit={handleCheck} className="w-3/4 py-7">
+                    <label htmlFor="room-number" className="uppercase text-sm text-start font-semibold">Ingresa número de habitación</label>
+                    <input type="text" name="room-number" autoComplete="off" maxLength={3} className="bg-transparent border-b focus:outline-none w-full px-4 mb-3" onChange={(e) => setInputRoomNumber(e.target.value)} />
 
-                    <label htmlFor="" className="uppercase text-sm text-start font-semibold">Ingresa código de habitación</label>
-                    <input type="text" name="" id="" maxLength={5} className="bg-transparent border-b focus:outline-none w-full px-4 uppercase" />
+                    <label htmlFor="room-code" className="uppercase text-sm text-start font-semibold">Ingresa código de habitación</label>
+                    <input type="text" name="room-code" autoComplete="off" maxLength={5} className="bg-transparent border-b focus:outline-none w-full px-4 uppercase" onChange={(e) => setInputRoomCode(e.target.value)} />
+
+
+                    <div className='text-center pt-7'>
+                        <button type="submit" className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
+                    </div>
                 </form>
-
-                <div className='text-center pb-5'>
-                    <button className="btn rounded-full px-6 bg-primary text-secondary font-bold" onClick={showModalError}>Continuar con mi pedido</button>
-                </div>
 
                 <p className="text-center font-semibold text-xs mx-10">Ingresa los datos que se encuentren en el hablador del QR escaneado anteriormente</p>
 
@@ -59,7 +82,7 @@ const Verify = () => {
                     </div>
                 </div>
             </dialog>
-            
+
         </div>
     )
 }
