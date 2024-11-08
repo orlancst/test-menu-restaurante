@@ -9,7 +9,7 @@ interface DrawerProps {
     idProd: number;
     isDishDetailOpened: boolean;
     setIsDishDetailOpened: React.Dispatch<React.SetStateAction<boolean>>;
-    handleAddToCart: (dish: Plato, cant: number, comment: string) => void;
+    handleAddToCart: (dish: Plato, cant: number, comment: string, addMore: boolean) => void;
 }
 
 const DishDetail: React.FC<DrawerProps> = (props) => {
@@ -19,8 +19,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     const [cant, setCant] = useState(1);
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
-    const cantLimit: number = 5;
-    const { cart } = useContext(CartContext);
+    const { cart, quantityLimit } = useContext(CartContext);
     
     const txtarea:HTMLTextAreaElement = document.querySelector('textarea[name="dish-comment"]')!
 
@@ -29,7 +28,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     }
 
     const handleSumar = () => {
-        cant < cantLimit && setCant(cant + 1)
+        cant < quantityLimit && setCant(cant + 1)
     }
 
     useEffect(() => {
@@ -83,7 +82,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     const handleAgregarAlCarrito = () => {
 
-        handleAddToCart(dish, cant, commentValue)
+        handleAddToCart(dish, cant, commentValue, false)
         closeDrawer()
         
     }

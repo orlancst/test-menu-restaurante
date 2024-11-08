@@ -3,9 +3,10 @@ import { Plato, UserCart } from "../types";
 
 interface MiContexto {
     cart: UserCart[];
-    addToCart: (dish: Plato, cant: number, comment: string) => void;
+    addToCart: (dish: Plato, cant: number, comment: string, addMore: boolean) => void;
     cartQuantity: () => number;
     cartTotalPrice: () => number;
+    quantityLimit: number;
 }
 
 interface CartProviderProps {
@@ -17,6 +18,7 @@ export const CartContext = createContext<MiContexto>({
     addToCart: () => { },
     cartQuantity: () => 0,
     cartTotalPrice: () => 0,
+    quantityLimit: 5,
 });
 
 const $cart: UserCart[] = JSON.parse(localStorage.getItem("cart") || '[]') as UserCart[]
@@ -25,7 +27,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     const [cart, setCart] = useState($cart)
 
-    const addToCart = (dish: Plato, cantidad: number, comentario: string) => {
+    //probablemente esto pueda aumentar o disminuir en un futuro
+    const quantityLimit: number = 5
+
+    const addToCart = (dish: Plato, cantidad: number, comentario: string, addMore: boolean) => {
 
         const itemAdded = {...dish, cantidad, comentario}
         const newCart = [...cart]
@@ -33,7 +38,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
         const alreadyAdded = newCart.find((prod) => prod.id === itemAdded.id)
 
         if (alreadyAdded) {
-            alreadyAdded.cantidad = cantidad;
+            if (addMore && alreadyAdded.cantidad < quantityLimit) {
+                alreadyAdded.cantidad += cantidad;
+            } else if (!addMore) {
+                alreadyAdded.cantidad = cantidad;
+            }
+
             alreadyAdded.comentario = comentario;
         } else {
             newCart.push(itemAdded)
@@ -61,6 +71,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             addToCart,
             cartQuantity,
             cartTotalPrice,
+            quantityLimit,
             }}>
 
             {children}

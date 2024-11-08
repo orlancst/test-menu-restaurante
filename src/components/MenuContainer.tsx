@@ -57,7 +57,7 @@ const MenuContainer: React.FC = () => {
 
                                     <div className="flex flex-row justify-between mb-3">
                                         <span className="font-semibold text-xl text-secondary">$ {prod.precio.toLocaleString('es-ES')}</span>
-                                        <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => {addToCart(prod, 1, "")}}>+</button>
+                                        <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => {addToCart(prod, 1, "", true)}}>+</button>
                                     </div>
                                     <hr className="h-0 border-t-1 mb-4" />
                                 </div>
