@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import TrashCanIcon from '../assets/svg/TrashCanIcon'
 import EditCommentIcon from '../assets/svg/EditCommentIcon'
@@ -13,6 +13,8 @@ const Cart: React.FC = () => {
     const [isModifyCommentsOpened, setIsModifyCommentsOpened] = useState(false);
     const [idProd, setIdProd] = useState(1)
 
+    const navigate = useNavigate()
+
     const handleOpenModifyComment = (id: number) => () => {
         setIdProd(id);
         setIsModifyCommentsOpened(true);
@@ -22,10 +24,10 @@ const Cart: React.FC = () => {
         <>
             <div className='flex flex-col h-lvh text-secondary'>
                 <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
-                    <Link to="/" className="flex items-center">
+                    <button onClick={() => {navigate(-1)}} className="flex items-center">
                         <LeftArrowIcon strokeColor="#ff5800" />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
-                    </Link>
+                    </button>
                     <div className="flex flex-col">
                         <span className="text-sm font-light">Tu carrito</span>
                         <span className="text-xl font-bold">$ {cartTotalPrice().toLocaleString('es-ES')}</span>

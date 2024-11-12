@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface CartSummaryProps {
   cantidad: number;
@@ -11,8 +11,10 @@ const CartSummary: React.FC<CartSummaryProps> = ({cantidad}) => {
   const { cartTotalPrice } = useContext(CartContext);
   const navigate = useNavigate();
 
+  const { search } = useLocation()
+
   const goToCart = () => {
-    navigate('/cart');
+    navigate(`/cart${search}`);
   }
 
   return (

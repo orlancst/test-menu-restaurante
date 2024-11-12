@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 import Testing from './components/Testing';
 import MenuContainer from './components/MenuContainer';
@@ -9,6 +9,7 @@ import OrderSummary from './components/OrderSummary';
 import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
+import UnavailableAccess from './components/UnavailableAccess';
 
 function App() {
 
@@ -19,13 +20,13 @@ function App() {
   // neutral: morado claro
   const [theme, setTheme] = useState<string | null>('')
 
+  
+
   useEffect(() => {
     const currentTheme = document.documentElement.getAttribute('data-theme')
+
     setTheme(currentTheme)
   }, [])
-
-  console.log(theme);
-  
 
   return (
     <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'}`}>
@@ -35,6 +36,7 @@ function App() {
           <Routes>
             {/* <Route path='/' element={<Testing />} /> */}
             <Route path='/' element={<MenuContainer />} />
+            {/* <Route path='/' element={<UnavailableAccess />} /> */}
             <Route path='/cart' element={<Cart />} />
             <Route path='/verify' element={<Verify />} />
             <Route path='/order-summary' element={<OrderSummary />} />

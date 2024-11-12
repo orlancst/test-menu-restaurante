@@ -2,20 +2,20 @@ import { useContext, useEffect, useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import { askForItem } from '../helpers/getExampleData';
-import { Plato } from '../types';
+import { Plato, Dish } from '../types';
 import { CartContext } from '../context/CartContext';
 
 interface DrawerProps {
     idProd: number;
     isDishDetailOpened: boolean;
     setIsDishDetailOpened: React.Dispatch<React.SetStateAction<boolean>>;
-    handleAddToCart: (dish: Plato, cant: number, comment: string, addMore: boolean) => void;
+    handleAddToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
 }
 
 const DishDetail: React.FC<DrawerProps> = (props) => {
 
     const { idProd, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart } = props
-    const [dish, setDish] = useState<Plato>({} as Plato)
+    const [dish, setDish] = useState<Dish>({} as Dish)
     const [cant, setCant] = useState(1);
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
@@ -55,7 +55,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
         askForItem(idProd)
             .then((res) => {
 
-                setDish(res as Plato)
+                setDish(res as Dish)
 
 
             })
@@ -89,8 +89,8 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     }
 
     useEffect(() => {
-        if (dish && dish.precio) {
-            setPrice(dish.precio * cant)
+        if (dish && dish.price) {
+            setPrice(dish.price * cant)
         }
     }, [cant, dish])
 
@@ -116,12 +116,12 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             <div className='flex flex-col'>
                 <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={closeDrawer}>✕</button>
 
-                <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish.plato}</h3>
+                <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish.price}</h3>
                 <p className='text-secondary text-xs leading-4 mt-2'>
-                    {dish.descripcion}
+                    {dish.description}
                 </p>
                 <span className='font-semibold text-secondary text-lg mt-2'>
-                    $ {dish.precio !== undefined && dish.precio.toLocaleString('es-ES')}
+                    $ {dish.price !== undefined && dish.price.toLocaleString('es-ES')}
                 </span>
 
                 <hr className='h-0 border-t-2 my-2' />

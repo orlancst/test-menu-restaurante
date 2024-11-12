@@ -4,16 +4,19 @@ import 'react-modern-drawer/dist/index.css'
 import { SidebarProps } from '../types';
 
 
-const Sidebar: React.FC<SidebarProps> = ({ products, isSidebarOpened, setIsSidebarOpened }) => {
+const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebarOpened }) => {
 
     const closeSidebar = () => {
         setIsSidebarOpened(false);
     }
 
-    const categories = [...new Set(products.map(prod => prod.categoria))]
+    //console.log(dishes, typeof(dishes));
+    
+
+    const categories = [...new Set(dishes.map(dish => dish.categoryName))]
 
     const categoryCount = categories.map(category => {
-        const count = products.filter(prod => prod.categoria === category).length
+        const count = dishes.filter(dish => dish.categoryName === category).length
 
         return { category, cant: count }
     })

@@ -10,10 +10,10 @@ export interface Platos {
     products: Plato[];
 }
 
-export interface SidebarProps extends Platos {
-    isSidebarOpened: boolean;
-    setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// export interface SidebarProps extends Platos {
+//     isSidebarOpened: boolean;
+//     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
 export interface NavbarProps {
     toggleSidebar: () => void;
@@ -31,3 +31,26 @@ export interface UserCart extends Plato {
 // }
 
 // type CreateDish = Omit<Dish, "plato" | "descripcion">
+
+export interface Dish {
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+    categoryId: number;
+    categoryName: string;
+}
+
+export interface Dishes {
+    dishes: Dish[];
+}
+
+export interface CartUser extends Dish {
+    cantidad: number;
+    comentario: string;
+}
+
+export interface SidebarProps extends Dishes {
+    isSidebarOpened: boolean;
+    setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
+}

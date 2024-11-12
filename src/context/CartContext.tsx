@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { Plato, UserCart } from "../types";
+import { Plato, UserCart, Dish, CartUser } from "../types";
 
 interface MiContexto {
-    cart: UserCart[];
-    addToCart: (dish: Plato, cant: number, comment: string, addMore: boolean) => void;
+    cart: CartUser[];
+    addToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
     cartQuantity: () => number;
     cartTotalPrice: () => number;
     quantityLimit: number;
@@ -23,7 +23,7 @@ export const CartContext = createContext<MiContexto>({
     modifyDishQuantityOnCart: () => { },
 });
 
-const $cart: UserCart[] = JSON.parse(localStorage.getItem("cart") || '[]') as UserCart[]
+const $cart: CartUser[] = JSON.parse(localStorage.getItem("cart") || '[]') as CartUser[]
 
 export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
@@ -32,9 +32,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     //probablemente este valor puede aumentar o disminuir en un futuro
     const quantityLimit: number = 5
 
-    const addToCart = (dish: Plato, cantidad: number, comentario: string, addMore: boolean) => {
+    const addToCart = (dish: Dish, cantidad: number, comentario: string, addMore: boolean) => {
 
-        const itemAdded: UserCart = {...dish, cantidad, comentario}
+        const itemAdded: CartUser = {...dish, cantidad, comentario}
         const newCart = [...cart]
 
         const alreadyAdded = newCart.find((prod) => prod.id === itemAdded.id)
@@ -88,7 +88,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     }
 
     const cartTotalPrice = () => {
-        return cart.reduce((acc, prod) => acc + prod.precio * prod.cantidad, 0)
+        return cart.reduce((acc, prod) => acc + prod.price * prod.cantidad, 0)
     }
 
     useEffect(() => {
