@@ -40,7 +40,7 @@ const MenuContainer: React.FC = () => {
         <>
             <Header />
             <Navbar toggleSidebar={handleOpenSidebar} />
-            <div className="flex flex-col font-montserrat mx-4 my-3">
+            <div className="flex flex-col mx-4 my-3">
                 <div>
 
                     {

@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                     <MenuIcon fillColor="#ff5800" />
                 </button>
             </div>
-            <div className="basis-1/3 flex justify-center text-xl font-bold font-montserrat text-primary border-t-2 border-b-2 border-b-primary">
+            <div className="basis-1/3 flex justify-center text-xl font-bold text-primary border-t-2 border-b-2 border-b-primary">
                 MENÚ
             </div>
             <div className="basis-1/3 border-t-2 border-b-2">

@@ -36,7 +36,7 @@ const Verify: React.FC = () => {
     }
 
     return (
-        <div className='flex flex-col h-lvh font-montserrat text-secondary'>
+        <div className='flex flex-col h-lvh text-secondary'>
             <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
                 <Link to="/cart" className="flex items-center">
                     <LeftArrowIcon strokeColor="#ff5800" />

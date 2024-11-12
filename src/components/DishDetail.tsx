@@ -106,7 +106,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             open={isDishDetailOpened}
             onClose={closeDrawer}
             direction='bottom'
-            className='bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior font-montserrat'
+            className='bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior'
             style={{
                 backgroundColor: '#4f0b7b',
                 height: 'auto',

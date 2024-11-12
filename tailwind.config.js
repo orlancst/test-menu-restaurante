@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "montserrat": ['Montserrat', 'sans-serif']
+        "montserrat": ['Montserrat', 'sans-serif'],
+        "gillSans": ["Gill Sans", "sans-serif"],
       },
       boxShadow: {
         "superior": '0 -4px 20px 0px rgba(0, 0, 0, 0.3)',
@@ -33,10 +34,10 @@ export default {
           "error": "#cf0042",
         },
         carpediem: {
-          "primary": "#1c00ff",
-          "secondary": "#008100",
-          "accent": "#00e6e0",
-          "neutral": "#000d09",
+          "primary": "#df0067",
+          "secondary": "#ffffff",
+          "accent": "#000000",
+          "neutral": "#7a142a",
           "base-100": "#4f0b7b",
           "info": "#00ffff",
           "success": "#00b500",

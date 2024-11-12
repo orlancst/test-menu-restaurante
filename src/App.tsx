@@ -8,6 +8,7 @@ import Verify from './components/Verify';
 import OrderSummary from './components/OrderSummary';
 import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
+import { useEffect, useState } from 'react';
 
 function App() {
 
@@ -16,9 +17,18 @@ function App() {
   // secondary: blanco
   // accent: morado oscuro
   // neutral: morado claro
+  const [theme, setTheme] = useState<string | null>('')
+
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    setTheme(currentTheme)
+  }, [])
+
+  console.log(theme);
+  
 
   return (
-    <div className=''>
+    <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'}`}>
       <CartProvider>
         <BrowserRouter>
 

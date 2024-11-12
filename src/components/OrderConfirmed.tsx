@@ -8,7 +8,7 @@ const OrderConfirmed: React.FC = () => {
 
 
     return (
-        <div className={`flex flex-col justify-center mx-8 font-montserrat ${!isSurveySubmitted ? 'my-12 min-h-lvh' : 'h-lvh'}`}>
+        <div className={`flex flex-col justify-center mx-8 ${!isSurveySubmitted ? 'my-12 min-h-lvh' : 'h-lvh'}`}>
             {!isSurveySubmitted ?
                 <Survey /> : <ThankYouPage />
             }

@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ products, isSidebarOpened, setIsSideb
                 open={isSidebarOpened}
                 onClose={closeSidebar}
                 direction='left'
-                className='bg-neutral py-5 rounded-tr-xl border-t-1 border-t-black shadow-superior font-montserrat'
+                className='bg-neutral py-5 rounded-tr-xl border-t-1 border-t-black shadow-superior'
                 style={{
                     backgroundColor: '#4f0b7b',
 

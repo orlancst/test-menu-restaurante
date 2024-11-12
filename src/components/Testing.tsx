@@ -47,11 +47,11 @@ const Testing: React.FC = () => {
     return (
         <div>
 
-            <h1 className="text-3xl font-extrabold text-primary font-montserrat">
+            <h1 className="text-3xl font-extrabold text-primary">
                 SEDE: {theme}
             </h1>
 
-            <div className="font-montserrat">
+            <div>
                 {
                     prods.map((prod) => (
                         <p key={prod.id}>

@@ -17,7 +17,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({cantidad}) => {
 
   return (
     <div className="sticky bottom-0 z-10 bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior">
-        <div className="flex flex-row justify-center gap-x-5 font-montserrat">
+        <div className="flex flex-row justify-center gap-x-5">
             <div className="flex flex-col">
                 <span className="text-sm text-secondary">{cantidad} producto{cantidad !== 1 ? 's' : ''}</span>
                 <span className="font-semibold text-xl text-secondary">$ {cartTotalPrice().toLocaleString('es-ES')}</span>
