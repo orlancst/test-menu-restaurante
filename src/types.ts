@@ -54,3 +54,8 @@ export interface SidebarProps extends Dishes {
     isSidebarOpened: boolean;
     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface OrderCheckCredentials {
+    roomNumber: string;
+    roomCode: string;
+}

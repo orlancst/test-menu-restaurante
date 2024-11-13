@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import TrashCanIcon from '../assets/svg/TrashCanIcon'
 import EditCommentIcon from '../assets/svg/EditCommentIcon'
@@ -15,6 +15,12 @@ const Cart: React.FC = () => {
 
     const navigate = useNavigate()
 
+    const { search } = useLocation()
+
+    const goToVerify = () => {
+        navigate(`/verify${search}`);
+    }
+
     const handleOpenModifyComment = (id: number) => () => {
         setIdProd(id);
         setIsModifyCommentsOpened(true);
@@ -24,7 +30,7 @@ const Cart: React.FC = () => {
         <>
             <div className='flex flex-col h-lvh text-secondary'>
                 <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
-                    <button onClick={() => {navigate(-1)}} className="flex items-center">
+                    <button onClick={() => { navigate(`/${search}`) }} className="flex items-center">
                         <LeftArrowIcon strokeColor="#ff5800" />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
                     </button>
@@ -41,10 +47,10 @@ const Cart: React.FC = () => {
                             cart.map((item) => {
 
                                 return (
-                                    <div key={item.plato} className='flex flex-col'>
+                                    <div key={item.name} className='flex flex-col'>
                                         <div className='flex justify-between items-end'>
                                             <div className='flex flex-col'>
-                                                <span className='font-medium'>{item.plato}</span>
+                                                <span className='font-medium'>{item.name}</span>
                                                 {
                                                     item.comentario !== '' ? (
                                                         <>
@@ -54,7 +60,7 @@ const Cart: React.FC = () => {
 
                                                     ) : <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Agregar comentario</span><EditCommentIcon stroke='#ff5800' /> </button>
                                                 }
-                                                <span className='font-semibold mt-1'>$ {(item.precio * item.cantidad).toLocaleString('es-ES')}</span>
+                                                <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                             </div>
                                             <div>
                                                 <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
@@ -82,10 +88,9 @@ const Cart: React.FC = () => {
                     {
                         cart.length > 0 &&
                         <div className='text-center py-5'>
-                            <Link to='/verify'>
-                                <button className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
 
-                            </Link>
+                            <button onClick={goToVerify} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
+
                         </div>
 
                     }

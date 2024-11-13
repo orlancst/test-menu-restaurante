@@ -9,8 +9,13 @@ import { askForData } from "../helpers/getExampleData";
 import { shortenParagraph } from "../helpers/utils"
 import { Dish, Plato } from "../types";
 import { CartContext } from "../context/CartContext"
-import { validateAccess } from "../hooks/validateAccess"
+import { validateAccess, findDish } from "../hooks/validateAccess"
 import UnavailableAccess from "./UnavailableAccess"
+
+interface DishData {
+    findDishData: Dish | null;
+    findDishError: string | null;
+}
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -21,6 +26,7 @@ const MenuContainer: React.FC = () => {
 
     const [prods, setProds] = useState<Plato[]>([]);
     const [dishes, setDishes] = useState<Dish[]>([]);
+    const [dish, setDish] = useState<Dish>()
     const [idProd, setIdProd] = useState(1)
 
     const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
@@ -44,9 +50,68 @@ const MenuContainer: React.FC = () => {
 
     }, [data])
 
-    const handleOpenDishDetail = (id: number) => () => {
-        setIdProd(id);
+    const handleOpenDishDetail = (id: number) => {
+        setIdProd((id));
         setIsDishDetailOpened(true);
+    }
+
+    // const handleOpenDishDetail = async (id: number) => {
+    //     setIdProd((id));
+
+    //     try {
+            
+    //         findDish(id)
+    //             .then((response) => {
+    //                 console.log(response);
+
+    //                 if (!response?.findDishError) {
+                        
+    //                     setDish(response?.findDishData ?? undefined)
+    //                     setIsDishDetailOpened(true);
+    //                 } else {
+    //                     console.log('indicar error de que el plato no se encontro');
+                        
+    //                 }
+                    
+    //             })
+
+
+    //     } catch (err) {
+    //         console.error("An unexpected error occurred:", error);
+    //     }
+    
+    // }
+
+
+    const findDish = async (id: number) :Promise<DishData | null> => {
+
+        try {
+
+            const response = await fetch(`${$API_KEY}restaurants/menu/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error(`Hubo un error: ${response.status}: ${response.statusText}`);
+            }
+
+            const data: Dish = await response.json() as Dish
+            return {findDishData: data, findDishError: null}
+
+        } catch (error) {
+
+            let errorMessage: string = "Error desconocido"
+
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+
+            return {findDishData: null, findDishError: errorMessage}
+        }
+        
     }
 
     const handleOpenSidebar = () => {
@@ -76,7 +141,7 @@ const MenuContainer: React.FC = () => {
                                     showCat &&
                                     <h3 className="text-3xl uppercase font-bold mb-2 text-primary">{dish.categoryName}</h3>
                                 }
-                                <h4 className="text-xl font-semibold text-secondary" onClick={handleOpenDishDetail(dish.id)}>{dish.name}</h4>
+                                <h4 className="text-xl font-semibold text-secondary" onClick={() => {handleOpenDishDetail(dish.id)}}>{dish.name}</h4>
                                 <p className="text-secondary text-sm">{shortenParagraph(dish.description, 70)}</p>
 
                                 <div className="flex flex-row justify-between mb-3">
@@ -89,28 +154,6 @@ const MenuContainer: React.FC = () => {
                         )
                     })
                 }
-                {/* {
-                    prods.map((prod, index) => {
-                        const showCat = index === 0 || prod.categoria !== prods[index - 1].categoria ? true : false;
-                        return (
-                            <div key={prod.id} id={showCat ? `#${prod.categoria.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
-                                {
-                                    showCat &&
-                                    <h3 className="text-3xl uppercase font-bold mb-2 text-primary">{prod.categoria}</h3>
-                                }
-                                <h4 className="text-xl font-semibold text-secondary" onClick={handleOpenDishDetail(prod.id)}>{prod.plato}</h4>
-                                <p className="text-secondary text-sm">{shortenParagraph(prod.descripcion, 70)}</p>
-
-                                <div className="flex flex-row justify-between mb-3">
-                                    <span className="font-semibold text-xl text-secondary">$ {prod.precio.toLocaleString('es-ES')}</span>
-                                    <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => { addToCart(prod, 1, "", true) }}>+</button>
-                                </div>
-                                <hr className="h-0 border-t-1 mb-4" />
-                            </div>
-                        )
-                    })
-                } */}
-
 
             </div>
             {

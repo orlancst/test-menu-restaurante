@@ -9,7 +9,6 @@ import OrderSummary from './components/OrderSummary';
 import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
-import UnavailableAccess from './components/UnavailableAccess';
 
 function App() {
 

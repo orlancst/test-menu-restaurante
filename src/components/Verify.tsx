@@ -1,21 +1,37 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import QRHablador from "../assets/svg/QRHablador"
 import { FormEvent, useState } from "react"
+import { OrderCheckCredentials } from "../types"
+
+const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
 const Verify: React.FC = () => {
 
+    const initialCredentials: OrderCheckCredentials = {
+        roomNumber: '',
+        roomCode: ''
+    }
+
     const [inputRoomNumber, setInputRoomNumber] = useState<string>('')
     const [inputRoomCode, setInputRoomCode] = useState<string>('')
+    const [credentials, setCredentials] = useState<OrderCheckCredentials>(initialCredentials)
+    const [message, setMessage] = useState<string>('')
+
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+    const roomNumber = searchParams.get('room')
 
     //esperar a la api para obtener los datos reales...
-    const roomNumber: string = '101'
-    const roomCode: string = '12345'
+    // const roomNumber: string = '101'
+    // const roomCode: string = '12345'
 
     const navigate = useNavigate();
+    const { search } = useLocation()
 
-    const showModalError = () => {
+    const showModalError = (msg: string) => {
         const modal = document.getElementById('modalInvalidData') as HTMLDialogElement | null
+        setMessage(msg)
 
         if (modal) {
             modal.showModal()
@@ -23,25 +39,62 @@ const Verify: React.FC = () => {
         }
     }
 
-    const handleCheck = (e:FormEvent<HTMLFormElement>) => {
+    const handleCheck = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (inputRoomNumber!== roomNumber || inputRoomCode!== roomCode) {
-            showModalError()
+        if (inputRoomNumber === '') {
+            showModalError('Digita el número de la habitación en el que se encuentra hospedado.')
             return false
         }
 
-        navigate('/order-summary');
+        if (inputRoomNumber !== roomNumber) {
+            showModalError('El número de la habitación ingresado no es correcto.')
+            return false
+        }
+
+        try {
+
+            setCredentials({roomNumber: inputRoomNumber, roomCode: inputRoomCode })
+
+            console.log(credentials)
+
+            const response = await fetch(`${$API_KEY}/orders/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            })
+
+            if (!response.ok) {
+                throw new Error('Hubo un problema con la petición al server.')
+            }
+
+            const dataReceived = await response.json()
+
+            console.log('respuesta: ', dataReceived);
+            
+
+        } catch (error) {
+            //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
+            //El código ingresado no coincide con el No° de la habitación.
+            console.error('Error al realizar la solicitud: ', error);
+            showModalError(`Error: ${error}`)
+        }
+
+
+
+        // navigate(`/order-summary${search}`);
         
     }
 
     return (
         <div className='flex flex-col h-lvh text-secondary'>
             <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
-                <Link to="/cart" className="flex items-center">
-                    <LeftArrowIcon strokeColor="#ff5800" />
-                    <span className="font-semibold text-xl ml-1">Atrás</span>
-                </Link>
+                <button onClick={() => { navigate(`/cart${search}`) }} className="flex items-center">
+                        <LeftArrowIcon strokeColor="#ff5800" />
+                        <span className="font-semibold text-xl ml-1">Atrás</span>
+                </button>
             </div>
             <div className='bg-neutral grow flex flex-col items-center'>
 
@@ -73,7 +126,7 @@ const Verify: React.FC = () => {
             <dialog id="modalInvalidData" className="modal backdrop:bg-[#0000009c]">
                 <div className="modal-box bg-neutral">
                     <h3 className="font-bold text-lg text-primary">¡Hola!</h3>
-                    <p className="pt-1 text-sm">El código ingresado no coincide con el No° de la habitación.</p>
+                    <p className="pt-1 text-sm">{message}</p>
                     <div className="modal-action mt-4">
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}

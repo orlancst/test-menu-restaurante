@@ -8,6 +8,11 @@ interface QueryData {
     error: string | null;
 }
 
+interface DishData {
+    findDishData: any;
+    findDisherror: string | null;
+}
+
 export const validateAccess = (branch: string, room: string, endpointUrl: string): QueryData => {
 
     const [data, setData] = useState(null)
@@ -45,4 +50,23 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
     }, [location.search, branch, room, endpointUrl])
 
     return { data, loading, error }
+}
+
+export const findDish = (idDish: number, endpointUrl: string): DishData => {
+    const [findDishData, setFindDishData] = useState(null)
+    const [findDisherror, setFindDisherror] = useState<string | null>(null)
+
+    useEffect(() => {
+        fetch(`${endpointUrl}restaurants/menu/${idDish}`)
+            .then((response) => response.json())
+            .then((result) => {
+                setFindDishData(result);
+            })
+            .catch((err) => {
+                setFindDisherror('Hubo un problema')
+            })
+    }, [endpointUrl, idDish])
+
+    return { findDishData, findDisherror }
+
 }

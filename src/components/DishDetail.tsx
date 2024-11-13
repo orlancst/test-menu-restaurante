@@ -4,6 +4,7 @@ import 'react-modern-drawer/dist/index.css'
 import { askForItem } from '../helpers/getExampleData';
 import { Plato, Dish } from '../types';
 import { CartContext } from '../context/CartContext';
+import { findDish } from "../hooks/validateAccess"
 
 interface DrawerProps {
     idProd: number;
@@ -12,6 +13,8 @@ interface DrawerProps {
     handleAddToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
 }
 
+const $API_KEY: string = import.meta.env.VITE_API_KEY;
+
 const DishDetail: React.FC<DrawerProps> = (props) => {
 
     const { idProd, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart } = props
@@ -19,7 +22,10 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     const [cant, setCant] = useState(1);
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
+    const [loading, setLoading] = useState(true);
     const { cart, quantityLimit } = useContext(CartContext);
+
+    const { findDishData, findDisherror} = findDish(idProd, $API_KEY)
 
     const txtarea: HTMLTextAreaElement = document.querySelector('textarea[name="dish-comment"]')!
 
@@ -51,16 +57,25 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
         }, 250);
     }
 
+    // useEffect(() => {
+    //     askForItem(idProd)
+    //         .then((res) => {
+
+    //             setDish(res as Dish)
+
+    //         })
+
+    // }, [idProd])
+
     useEffect(() => {
-        askForItem(idProd)
-            .then((res) => {
 
-                setDish(res as Dish)
+        if (findDishData) {
+            setLoading(false)
+            setDish(findDishData as Dish)
+            
+        }
 
-
-            })
-
-    }, [idProd])
+    }, [findDishData])
 
     useEffect(() => {
         if (isDishDetailOpened) {
@@ -116,7 +131,10 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             <div className='flex flex-col'>
                 <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={closeDrawer}>✕</button>
 
-                <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish.price}</h3>
+                {/* <p className='text-center font-bold text-secondary text-2xl py-4'>CARGANDO</p> */}
+
+
+                <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish.name}</h3>
                 <p className='text-secondary text-xs leading-4 mt-2'>
                     {dish.description}
                 </p>
