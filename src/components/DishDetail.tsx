@@ -4,30 +4,32 @@ import 'react-modern-drawer/dist/index.css'
 import { askForItem } from '../helpers/getExampleData';
 import { Plato, Dish } from '../types';
 import { CartContext } from '../context/CartContext';
-import { findDish } from "../hooks/validateAccess"
 
 interface DrawerProps {
-    idProd: number;
+    dish: Dish | null;
+    loadDish: boolean;
+    onDishErr: string | null;
     isDishDetailOpened: boolean;
     setIsDishDetailOpened: React.Dispatch<React.SetStateAction<boolean>>;
     handleAddToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
 }
 
-const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
 const DishDetail: React.FC<DrawerProps> = (props) => {
 
-    const { idProd, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart } = props
-    const [dish, setDish] = useState<Dish>({} as Dish)
+    const { dish, loadDish, onDishErr, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart } = props
+    //const [dish, setDish] = useState<Dish>({} as Dish)
     const [cant, setCant] = useState(1);
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
-    const [loading, setLoading] = useState(true);
+
     const { cart, quantityLimit } = useContext(CartContext);
 
-    const { findDishData, findDisherror} = findDish(idProd, $API_KEY)
+    // const { findDishData, findDisherror } = findDish(idProd, $API_KEY)
 
     const txtarea: HTMLTextAreaElement = document.querySelector('textarea[name="dish-comment"]')!
+
+    //console.log(loading);
 
     const handleRestar = () => {
         cant > 1 && setCant(cant - 1)
@@ -67,22 +69,21 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     // }, [idProd])
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     if (findDishData && idProd !== 1) {
+    //         setLoading(false)
+    //         setDish(findDishData as Dish)
+    //     }
+    // }, [findDishData])
 
-        if (findDishData) {
-            setLoading(false)
-            setDish(findDishData as Dish)
-            
-        }
 
-    }, [findDishData])
 
     useEffect(() => {
         if (isDishDetailOpened) {
-            const dishOnCart = cart.find((item) => item.id === dish.id);
+            const dishOnCart = cart.find((item) => item.id === dish?.id);
 
             if (dishOnCart) {
-                
+
                 setCant(dishOnCart.cantidad)
                 setCommentValue(dishOnCart.comentario)
 
@@ -98,7 +99,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     const handleAgregarAlCarrito = () => {
 
-        handleAddToCart(dish, cant, commentValue, false)
+        handleAddToCart(dish as Dish, cant, commentValue, false)
         closeDrawer()
 
     }
@@ -131,31 +132,40 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             <div className='flex flex-col'>
                 <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2' onClick={closeDrawer}>✕</button>
 
-                {/* <p className='text-center font-bold text-secondary text-2xl py-4'>CARGANDO</p> */}
+                {
+                    (loadDish) ? (
+                        <div className="skeleton h-32 w-full mt-6"></div>
+                    ) : (onDishErr) ? (
+                        <p className='text-center text-sm text-secondary'>¡Ups! Ha ocurrido un error.</p>
+                    ) : (
+                        <>
+                            <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish?.name}</h3>
+                            <p className='text-secondary text-xs leading-4 mt-2'>
+                                {dish?.description}
+                            </p>
+                            <span className='font-semibold text-secondary text-lg mt-2'>
+                                $ {dish?.price !== undefined && dish.price.toLocaleString('es-ES')}
+                            </span>
+
+                            <hr className='h-0 border-t-2 my-2' />
+
+                            <form action="" className='flex flex-col'>
+                                <label htmlFor="dish-comment" className='text-sm text-secondary mb-1'>Comentarios</label>
+                                <textarea name="dish-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-xs p-2 focus:outline-none' onChange={handleChangeComment}></textarea>
+                            </form>
+                            <div className="flex flex-row justify-center gap-x-5 mt-6">
+                                <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
+                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={handleRestar}>-</button>
+                                    <span className='grow text-center text-secondary'>{cant}</span>
+                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={handleSumar}>+</button>
+                                </div>
+                                <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleAgregarAlCarrito}>Agregar $ {price.toLocaleString('es-ES')}</button>
+                            </div>
+                        </>
+                    )
+                }
 
 
-                <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish.name}</h3>
-                <p className='text-secondary text-xs leading-4 mt-2'>
-                    {dish.description}
-                </p>
-                <span className='font-semibold text-secondary text-lg mt-2'>
-                    $ {dish.price !== undefined && dish.price.toLocaleString('es-ES')}
-                </span>
-
-                <hr className='h-0 border-t-2 my-2' />
-
-                <form action="" className='flex flex-col'>
-                    <label htmlFor="dish-comment" className='text-sm text-secondary mb-1'>Comentarios</label>
-                    <textarea name="dish-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-xs p-2 focus:outline-none' onChange={handleChangeComment}></textarea>
-                </form>
-                <div className="flex flex-row justify-center gap-x-5 mt-6">
-                    <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
-                        <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={handleRestar}>-</button>
-                        <span className='grow text-center text-secondary'>{cant}</span>
-                        <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={handleSumar}>+</button>
-                    </div>
-                    <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleAgregarAlCarrito}>Agregar $ {price.toLocaleString('es-ES')}</button>
-                </div>
             </div>
 
         </Drawer>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
@@ -7,6 +7,8 @@ const OrderSummary: React.FC = () => {
 
     const { cart, cartTotalPrice } = useContext(CartContext);
     const navigate = useNavigate();
+    const { search } = useLocation()
+
 
     const handleSubmitOrder = () => {
 
@@ -22,10 +24,10 @@ const OrderSummary: React.FC = () => {
     return (
         <div className='flex flex-col h-lvh text-secondary'>
             <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
-                <Link to="/cart" className="flex items-center">
+                <button onClick={() => { navigate(`/verify${search}`) }} className="flex items-center">
                     <LeftArrowIcon strokeColor="#ff5800" />
                     <span className="font-semibold text-xl ml-1">Atrás</span>
-                </Link>
+                </button>
             </div>
             <div className='bg-neutral grow flex flex-col'>
 
@@ -37,12 +39,12 @@ const OrderSummary: React.FC = () => {
                         cart.map((item) => {
 
                             return (
-                                <div key={item.plato} className="flex flex-row justify-between items-start border-b pb-1 mb-2">
+                                <div key={item.name} className="flex flex-row justify-between items-start border-b pb-1 mb-2">
                                     <span className="w-40 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
-                                        {item.plato}
+                                        {item.name}
                                     </span>
                                     <span>{item.cantidad}</span>
-                                    <span className="w-24 text-right font-bold">$ {(item.precio * item.cantidad).toLocaleString('es-ES')}</span>
+                                    <span className="w-24 text-right font-bold">$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                 </div>
                             )
                         })

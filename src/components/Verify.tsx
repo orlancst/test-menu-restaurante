@@ -3,6 +3,7 @@ import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import QRHablador from "../assets/svg/QRHablador"
 import { FormEvent, useState } from "react"
 import { OrderCheckCredentials } from "../types"
+import LoaderMask from "./LoaderMask"
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -21,6 +22,7 @@ const Verify: React.FC = () => {
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
     const roomNumber = searchParams.get('room')
+    const [loader, setLoader] = useState<boolean>(false)
 
     //esperar a la api para obtener los datos reales...
     // const roomNumber: string = '101'
@@ -52,34 +54,43 @@ const Verify: React.FC = () => {
             return false
         }
 
+        setLoader(true)
+
         try {
 
-            setCredentials({roomNumber: inputRoomNumber, roomCode: inputRoomCode })
-
-            console.log(credentials)
-
-            const response = await fetch(`${$API_KEY}/orders/validate`, {
+            const response = await fetch(`${$API_KEY}orders/validate`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    
                 },
-                body: JSON.stringify(credentials)
+                body: JSON.stringify({
+                    roomNumber: inputRoomNumber,
+                    roomCode: inputRoomCode,
+                })
             })
 
             if (!response.ok) {
+                console.log(response);
+                
                 throw new Error('Hubo un problema con la petición al server.')
             }
 
             const dataReceived = await response.json()
 
             console.log('respuesta: ', dataReceived);
-            
+            localStorage.setItem("accessKey", dataReceived.accessKey)
+            navigate(`/order-summary${search}`);
 
         } catch (error) {
             //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
             //El código ingresado no coincide con el No° de la habitación.
             console.error('Error al realizar la solicitud: ', error);
             showModalError(`Error: ${error}`)
+
+        } finally {
+
+            setLoader(false)
         }
 
 
@@ -90,6 +101,11 @@ const Verify: React.FC = () => {
 
     return (
         <div className='flex flex-col h-lvh text-secondary'>
+
+        {
+            loader && <LoaderMask />
+        }
+
             <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
                 <button onClick={() => { navigate(`/cart${search}`) }} className="flex items-center">
                         <LeftArrowIcon strokeColor="#ff5800" />

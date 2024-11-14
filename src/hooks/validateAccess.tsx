@@ -13,6 +13,12 @@ interface DishData {
     findDisherror: string | null;
 }
 
+interface ErrorResponse {
+    message:string;
+    statusCode: number;
+    
+}
+
 export const validateAccess = (branch: string, room: string, endpointUrl: string): QueryData => {
 
     const [data, setData] = useState(null)
@@ -25,23 +31,50 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
         return searchParams.get(param)
     }
 
+    const apiCall = async (branchParam: string, roomParam: string, endpointUrl: string) => {
+        let list = [];
+        try {
+            const response = await fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}`)
+            if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`)
+            const result = await response.json()
+            list = result
+        } catch (err) {
+            const error = err as ErrorResponse;
+            setError(error.message || 'Hubo un problema')
+        } finally {
+            setLoading(false);
+            setData(list)
+        }
+    }
+
+
+
     useEffect(() => {
         const branchParam = getParam(branch)
         const roomParam = getParam(room)
 
         if (branchParam && roomParam) {
 
-            fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}`)
-                .then((response) => response.json())
-                .then((result) => {
-                    setData(result)
-                    setLoading(false);
+            apiCall(branchParam, roomParam, endpointUrl)
 
-                })
-                .catch((err) => {
-                    setError('Hubo un problema')
-                    setLoading(false);
-                })
+            // fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}`)
+            //     .then((response) => {
+            //         if (!response.ok) {
+            //             return response.json().then((errorData) => {
+            //                 throw new Error(`${response.status}: ${errorData.message}`)
+            //             })
+            //         }
+            //         return response.json()
+            //     })
+            //     .then((result) => {
+            //         setData(result)
+            //         setLoading(false);
+
+            //     })
+            //     .catch((err) => {
+            //         setError(err.message || 'Hubo un problema')
+            //         setLoading(false);
+            //     })
 
         } else {
             setError('Query params no encontrados')
