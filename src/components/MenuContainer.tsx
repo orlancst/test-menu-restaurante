@@ -15,9 +15,15 @@ import UnavailableAccess from "./UnavailableAccess"
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
-const MenuContainer: React.FC = () => {
+interface MenuContainerProps {
+    theme: string;
+    hq: string;
+}
+
+const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
     const { addToCart, cartQuantity } = useContext(CartContext);
+
     const isCartEmpty = cartQuantity() > 0 ? false : true;
 
     const [prods, setProds] = useState<Plato[]>([]);
@@ -39,11 +45,14 @@ const MenuContainer: React.FC = () => {
     useEffect(() => {
 
         if (data) {
+            
             setDishes(data)
             
         }
-
+        
     }, [data])
+    
+    
 
     const handleOpenDishDetail = (id: number) => {
  
@@ -62,13 +71,13 @@ const MenuContainer: React.FC = () => {
     }
 
     if (error) {
-        return <UnavailableAccess />
+        return <UnavailableAccess theme={theme} />
     }
 
     return (
         <>
-            <Header />
-            <Navbar toggleSidebar={handleOpenSidebar} />
+            <Header theme={theme} hq={hq} />
+            <Navbar toggleSidebar={handleOpenSidebar} theme={theme} />
             <div className="flex flex-col mx-4 my-3">
 
                 {
@@ -86,7 +95,7 @@ const MenuContainer: React.FC = () => {
                                 <div className="flex flex-row justify-between mb-3">
                                     <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-ES')}</span>
                                     <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
-                                    {/* <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => { addToCart(dish, 1, "", true) }}>+</button> */}
+
                                 </div>
                                 <hr className="h-0 border-t-1 mb-4" />
                             </div>

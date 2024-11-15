@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import TrashCanIcon from '../assets/svg/TrashCanIcon'
 import EditCommentIcon from '../assets/svg/EditCommentIcon'
@@ -6,7 +6,11 @@ import { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import ModifyComment from './ModifyComment';
 
-const Cart: React.FC = () => {
+interface CartProps {
+    theme: string;
+}
+
+const Cart: React.FC<CartProps> = ({ theme }) => {
 
     const { cart, cartTotalPrice, modifyDishQuantityOnCart, addToCart } = useContext(CartContext);
 
@@ -31,7 +35,7 @@ const Cart: React.FC = () => {
             <div className='flex flex-col h-lvh text-secondary'>
                 <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
                     <button onClick={() => { navigate(`/${search}`) }} className="flex items-center">
-                        <LeftArrowIcon strokeColor="#ff5800" />
+                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
                     </button>
                     <div className="flex flex-col">
@@ -55,10 +59,10 @@ const Cart: React.FC = () => {
                                                     item.comentario !== '' ? (
                                                         <>
                                                             <span className='font-light text-xs italic'>{item.comentario}</span>
-                                                            <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Editar comentarios</span><EditCommentIcon stroke='#ff5800' /> </button>
+                                                            <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Editar comentarios</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
                                                         </>
 
-                                                    ) : <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Agregar comentario</span><EditCommentIcon stroke='#ff5800' /> </button>
+                                                    ) : <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Agregar comentario</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
                                                 }
                                                 <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                             </div>

@@ -4,25 +4,27 @@ import QRHablador from "../assets/svg/QRHablador"
 import { FormEvent, useState } from "react"
 import { OrderCheckCredentials } from "../types"
 import LoaderMask from "./LoaderMask"
+import { ModalAlert } from "./ModalAlert"
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
-const Verify: React.FC = () => {
+interface VerifyProps {
+    theme: string;
+    setAccessKey: React.Dispatch<React.SetStateAction<string>>
+}
 
-    const initialCredentials: OrderCheckCredentials = {
-        roomNumber: '',
-        roomCode: ''
-    }
+const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
 
     const [inputRoomNumber, setInputRoomNumber] = useState<string>('')
     const [inputRoomCode, setInputRoomCode] = useState<string>('')
-    const [credentials, setCredentials] = useState<OrderCheckCredentials>(initialCredentials)
+
     const [message, setMessage] = useState<string>('')
 
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
     const roomNumber = searchParams.get('room')
     const [loader, setLoader] = useState<boolean>(false)
+    const [loaderMsj, setLoaderMsj] = useState<string>('')
 
     //esperar a la api para obtener los datos reales...
     // const roomNumber: string = '101'
@@ -55,6 +57,7 @@ const Verify: React.FC = () => {
         }
 
         setLoader(true)
+        setLoaderMsj('Comprobando')
 
         try {
 
@@ -79,7 +82,7 @@ const Verify: React.FC = () => {
             const dataReceived = await response.json()
 
             console.log('respuesta: ', dataReceived);
-            localStorage.setItem("accessKey", dataReceived.accessKey)
+            setAccessKey(dataReceived.accessKey)
             navigate(`/order-summary${search}`);
 
         } catch (error) {
@@ -103,12 +106,12 @@ const Verify: React.FC = () => {
         <div className='flex flex-col h-lvh text-secondary'>
 
         {
-            loader && <LoaderMask />
+            loader && <LoaderMask loaderMsj={loaderMsj} />
         }
 
             <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
                 <button onClick={() => { navigate(`/cart${search}`) }} className="flex items-center">
-                        <LeftArrowIcon strokeColor="#ff5800" />
+                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
                 </button>
             </div>
@@ -139,18 +142,7 @@ const Verify: React.FC = () => {
                 </div>
             </div>
 
-            <dialog id="modalInvalidData" className="modal backdrop:bg-[#0000009c]">
-                <div className="modal-box bg-neutral">
-                    <h3 className="font-bold text-lg text-primary">¡Hola!</h3>
-                    <p className="pt-1 text-sm">{message}</p>
-                    <div className="modal-action mt-4">
-                        <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
-                            <button className="btn btn-sm rounded-full px-6 bg-primary text-secondary font-bold">Ok</button>
-                        </form>
-                    </div>
-                </div>
-            </dialog>
+            <ModalAlert message={message} />
 
         </div>
     )

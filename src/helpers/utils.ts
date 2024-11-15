@@ -1,3 +1,5 @@
+import { CartUser } from "../types";
+
 export const shortenParagraph = (texto: string, maxLength: number) => {
     if (texto.length <= maxLength) {
         return texto;
@@ -12,4 +14,13 @@ export const shortenParagraph = (texto: string, maxLength: number) => {
     }
 
     return textoCortado + "...";
+}
+
+export const adaptCartReq = (cart:Array<CartUser>) => {
+    return cart.map((item) => ({
+        id: item.id,
+        quantity: item.cantidad,
+        comments: item.comentario,
+        price: item.price,
+    }));
 }

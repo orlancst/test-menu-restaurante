@@ -8,11 +8,6 @@ interface QueryData {
     error: string | null;
 }
 
-interface DishData {
-    findDishData: any;
-    findDisherror: string | null;
-}
-
 interface ErrorResponse {
     message:string;
     statusCode: number;
@@ -47,8 +42,6 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
         }
     }
 
-
-
     useEffect(() => {
         const branchParam = getParam(branch)
         const roomParam = getParam(room)
@@ -57,24 +50,6 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
 
             apiCall(branchParam, roomParam, endpointUrl)
 
-            // fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}`)
-            //     .then((response) => {
-            //         if (!response.ok) {
-            //             return response.json().then((errorData) => {
-            //                 throw new Error(`${response.status}: ${errorData.message}`)
-            //             })
-            //         }
-            //         return response.json()
-            //     })
-            //     .then((result) => {
-            //         setData(result)
-            //         setLoading(false);
-
-            //     })
-            //     .catch((err) => {
-            //         setError(err.message || 'Hubo un problema')
-            //         setLoading(false);
-            //     })
 
         } else {
             setError('Query params no encontrados')
@@ -83,23 +58,4 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
     }, [location.search, branch, room, endpointUrl])
 
     return { data, loading, error }
-}
-
-export const findDish = (idDish: number, endpointUrl: string): DishData => {
-    const [findDishData, setFindDishData] = useState(null)
-    const [findDisherror, setFindDisherror] = useState<string | null>(null)
-
-    useEffect(() => {
-        fetch(`${endpointUrl}restaurants/menu/${idDish}`)
-            .then((response) => response.json())
-            .then((result) => {
-                setFindDishData(result);
-            })
-            .catch((err) => {
-                setFindDisherror('Hubo un problema')
-            })
-    }, [endpointUrl, idDish])
-
-    return { findDishData, findDisherror }
-
 }
