@@ -56,7 +56,7 @@ export interface Dishes {
 
 export interface CartUser extends Dish {
     cantidad: number;
-    comentario: string;
+    comentario?: string;
 }
 
 export interface SidebarProps extends Dishes {

@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import LoaderMask from "./LoaderMask";
 import { ModalAlert } from "./ModalAlert";
 import { adaptCartReq } from "../helpers/utils";
+import ForbidenAccess from "./ForbidenAccess";
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -23,6 +24,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
     const [loader, setLoader] = useState<boolean>(false)
     const [loaderMsj, setLoaderMsj] = useState<string>('')
 
+    useEffect(() => {
+
+        if (accessKey) {
+            localStorage.setItem('accessKey', accessKey)
+        }
+
+    }, [accessKey])
+
     const showModalError = (msg: string) => {
         const modal = document.getElementById('modalInvalidData') as HTMLDialogElement | null
         setMessage(msg)
@@ -32,7 +41,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
 
         }
     }
-
+    
     const handleSubmitOrder = async () => {
 
         console.log(
@@ -43,50 +52,57 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
         )
 
 
-        // setLoader(true)
-        // setLoaderMsj('Realizando pedido')
-        
-        // try {
-        //     console.log(accessKey);
+        setLoader(true)
+        setLoaderMsj('Realizando pedido')
 
-        //     const response = await fetch(`${$API_KEY}orders`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'authorization': accessKey,
-        //             'Content-Type': 'application/json',
-                    
-        //         },
-        //         body: JSON.stringify({
+        try {
+            console.log(accessKey);
 
-        //         })
-        //     })
+            const response = await fetch(`${$API_KEY}orders`, {
+                method: 'POST',
+                headers: {
+                    'authorization': accessKey,
+                    'Content-Type': 'application/json',
 
-        //     if (!response.ok) {
-        //         console.log(response);
-                
-        //         throw new Error('Hubo un problema con la petición al server.')
-        //     }
+                },
+                body: JSON.stringify({
+                    "addedItems": adaptCartReq(cart),
+                    "totalAmount": cartTotalPrice()
+                })
+            })
 
-        //     const dataReceived = await response.json()
-        //     console.log(dataReceived);
-            
+            if (!response.ok) {
+                console.log(response);
+
+                throw new Error('Hubo un problema con la petición al server.')
+            }
+
+            const dataReceived = await response.json()
+            console.log(dataReceived);
 
 
-        // } catch (error) {
-        //     //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
-        //     //El código ingresado no coincide con el No° de la habitación.
-        //     console.error('Error al realizar la solicitud: ', error);
-        //     showModalError(`Error: ${error}`)
 
-        // } finally {
+        } catch (error) {
+            //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
+            //El código ingresado no coincide con el No° de la habitación.
+            console.error('Error al realizar la solicitud: ', error);
+            showModalError(`Error: ${error}`)
 
-        //     setLoader(false)
-        // }
+        } finally {
+
+            setLoader(false)
+        }
 
 
         //cuando se confirme que se envio la orden, mandar a la ventana de orden confirmada
         //navigate('/order-confirmed');
 
+    }
+
+    if (!accessKey && localStorage.getItem('accessKey') === '') {
+        return (
+            <ForbidenAccess theme={theme} />
+        )
     }
 
     return (

@@ -70,7 +70,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         return <Loading />
     }
 
-    if (error) {
+    if (error || dishes.length === 0) {
         return <UnavailableAccess theme={theme} />
     }
 
@@ -106,7 +106,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             </div>
             {
                 !isCartEmpty &&
-                <CartSummary cantidad={cartQuantity()} />
+                <CartSummary theme={theme} cantidad={cartQuantity()} />
             }
 
 

@@ -47,6 +47,14 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
 
                     <div className='p-5 pb-0 flex flex-col'>
 
+
+                        {
+                            cart.length === 0 &&
+                            <div className="text-center">
+                                <span className="text-sm font-semibold">Tu carrito está vacío.</span>
+                            </div>
+                        }
+
                         {
                             cart.map((item) => {
 
@@ -90,13 +98,19 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                     </div>
 
                     {
-                        cart.length > 0 &&
-                        <div className='text-center py-5'>
+                        cart.length > 0 ?
+                            <>
 
-                            <button onClick={goToVerify} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
+                                <div className='text-center py-5'>
 
-                        </div>
+                                    <button onClick={goToVerify} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
 
+                                </div>
+                            </>
+                            :
+                            <div className='text-center py-5'>
+                                <button onClick={() => { navigate(`/${search}`) }} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Regresar al menú</button>
+                            </div>
                     }
                 </div>
             </div>

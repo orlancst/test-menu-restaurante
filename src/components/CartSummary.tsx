@@ -3,10 +3,11 @@ import { CartContext } from "../context/CartContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface CartSummaryProps {
+  theme: string;
   cantidad: number;
 }
 
-const CartSummary: React.FC<CartSummaryProps> = ({cantidad}) => {
+const CartSummary: React.FC<CartSummaryProps> = ({theme, cantidad}) => {
   
   const { cartTotalPrice } = useContext(CartContext);
   const navigate = useNavigate();

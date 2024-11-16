@@ -9,17 +9,26 @@ interface HeaderProps {
   hq: string;
 }
 
-const Header: React.FC<HeaderProps> = ({theme, hq}) => {
+const Header: React.FC<HeaderProps> = ({ theme, hq }) => {
   return (
-    <div className="grid place-items-center bg-neutral">
-        <img src={
-          theme === 'carpediem'? LogoCarpeDiem :
-          hq === 'Circunvalar'? LogoByHoursCircunvalar :
-          hq === 'Astor'? LogoByHoursAstor :
-          hq === 'Chiquinquirá'? LogoByHoursChiquinquira :
-          hq === 'Las Américas'? LogoByHoursLasAmericas :
-          LogoByHoursCircunvalar 
-        } alt="" width={200} className="py-6" />
+    <div className="flex flex-col items-center bg-neutral py-3">
+      <img src={
+        theme === 'carpediem' ? LogoCarpeDiem :
+          hq === 'Circunvalar' ? LogoByHoursCircunvalar :
+            hq === 'Astor' ? LogoByHoursAstor :
+              hq === 'Chiquinquirá' ? LogoByHoursChiquinquira :
+                hq === 'Las Américas' ? LogoByHoursLasAmericas :
+                  LogoByHoursCircunvalar
+      } alt="" width={
+        theme === 'carpediem' ? 100 : 200
+      } className="py-2" />
+
+
+      {
+        theme === 'carpediem' ?
+          <h1 className="font-bold text-secondary text-2xl">{hq.toUpperCase()}</h1>
+          : ''
+      }
     </div>
   )
 }

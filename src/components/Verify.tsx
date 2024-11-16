@@ -1,10 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import QRHablador from "../assets/svg/QRHablador"
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useEffect, useState } from "react"
 import { OrderCheckCredentials } from "../types"
 import LoaderMask from "./LoaderMask"
 import { ModalAlert } from "./ModalAlert"
+import { CartContext } from "../context/CartContext"
+import ForbidenAccess from "./ForbidenAccess"
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -14,6 +16,10 @@ interface VerifyProps {
 }
 
 const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
+
+    const { cartQuantity } = useContext(CartContext);
+
+    const isCartEmpty = cartQuantity() > 0 ? false : true;
 
     const [inputRoomNumber, setInputRoomNumber] = useState<string>('')
     const [inputRoomCode, setInputRoomCode] = useState<string>('')
@@ -26,9 +32,11 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
     const [loader, setLoader] = useState<boolean>(false)
     const [loaderMsj, setLoaderMsj] = useState<string>('')
 
-    //esperar a la api para obtener los datos reales...
-    // const roomNumber: string = '101'
-    // const roomCode: string = '12345'
+    useEffect(() => {
+        if (localStorage.getItem('accessKey') !== '') {
+            localStorage.removeItem('accessKey')
+        }
+    })
 
     const navigate = useNavigate();
     const { search } = useLocation()
@@ -75,13 +83,19 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
 
             if (!response.ok) {
                 console.log(response);
+
+                if (response.status === 403) {
+                    throw new Error('El código ingresado no es el correcto.')
+
+                } else {
+                    throw new Error('Hubo un problema con la petición al server.')
+
+                }
                 
-                throw new Error('Hubo un problema con la petición al server.')
             }
 
             const dataReceived = await response.json()
 
-            console.log('respuesta: ', dataReceived);
             setAccessKey(dataReceived.accessKey)
             navigate(`/order-summary${search}`);
 
@@ -89,7 +103,7 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
             //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
             //El código ingresado no coincide con el No° de la habitación.
             console.error('Error al realizar la solicitud: ', error);
-            showModalError(`Error: ${error}`)
+            showModalError(`${error}`)
 
         } finally {
 
@@ -100,6 +114,12 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
 
         // navigate(`/order-summary${search}`);
         
+    }
+
+    if (isCartEmpty) {
+        return (
+            <ForbidenAccess theme={theme} />
+        )
     }
 
     return (

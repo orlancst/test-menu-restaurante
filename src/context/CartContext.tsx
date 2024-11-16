@@ -7,6 +7,7 @@ interface MiContexto {
     cartQuantity: () => number;
     cartTotalPrice: () => number;
     quantityLimit: number;
+    freeQuantityLimit: number; 
     modifyDishQuantityOnCart: (dishId: number, add: boolean) => void;
 }
 
@@ -20,6 +21,7 @@ export const CartContext = createContext<MiContexto>({
     cartQuantity: () => 0,
     cartTotalPrice: () => 0,
     quantityLimit: 5,
+    freeQuantityLimit: 2,
     modifyDishQuantityOnCart: () => { },
 });
 
@@ -31,6 +33,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     //probablemente este valor puede aumentar o disminuir en un futuro
     const quantityLimit: number = 5
+    const freeQuantityLimit: number = 2
 
     const addToCart = (dish: Dish, cantidad: number, comentario: string, addMore: boolean) => {
 
@@ -102,6 +105,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             cartQuantity,
             cartTotalPrice,
             quantityLimit,
+            freeQuantityLimit,
             modifyDishQuantityOnCart,
             }}>
 

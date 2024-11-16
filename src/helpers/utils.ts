@@ -17,10 +17,14 @@ export const shortenParagraph = (texto: string, maxLength: number) => {
 }
 
 export const adaptCartReq = (cart:Array<CartUser>) => {
-    return cart.map((item) => ({
+    return cart.map((item) => (item.comentario ? {
         id: item.id,
         quantity: item.cantidad,
         comments: item.comentario,
         price: item.price,
-    }));
+    }: {
+        id: item.id,
+        quantity: item.cantidad,
+        price: item.price,
+    } ));
 }
