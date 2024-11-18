@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { askForItem } from '../helpers/getExampleData';
-import { Plato, Dish } from '../types';
+import { Dish } from '../types';
 import { CartContext } from '../context/CartContext';
 
 interface DrawerProps {
@@ -23,7 +22,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
 
-    const { cart, quantityLimit } = useContext(CartContext);
+    const { cart, quantityLimit, freeQuantityLimit } = useContext(CartContext);
 
     // const { findDishData, findDisherror } = findDish(idProd, $API_KEY)
 
@@ -36,7 +35,16 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     }
 
     const handleSumar = () => {
-        cant < quantityLimit && setCant(cant + 1)
+
+        if (dish?.categoryId !== 7) {
+            cant < quantityLimit && setCant(cant + 1)
+            
+        } else {
+            
+            cant < freeQuantityLimit && setCant(cant + 1)
+
+        }
+        
     }
 
     useEffect(() => {
@@ -59,25 +67,6 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
         }, 250);
     }
 
-    // useEffect(() => {
-    //     askForItem(idProd)
-    //         .then((res) => {
-
-    //             setDish(res as Dish)
-
-    //         })
-
-    // }, [idProd])
-
-    // useEffect(() => {
-    //     if (findDishData && idProd !== 1) {
-    //         setLoading(false)
-    //         setDish(findDishData as Dish)
-    //     }
-    // }, [findDishData])
-
-
-
     useEffect(() => {
         if (isDishDetailOpened) {
             const dishOnCart = cart.find((item) => item.id === dish?.id);
@@ -85,8 +74,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             if (dishOnCart) {
 
                 setCant(dishOnCart.cantidad)
-                setCommentValue(dishOnCart.comentario)
-
+                setCommentValue(dishOnCart.comentario as string)
 
             } else {
                 setCant(1)
@@ -159,7 +147,8 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
                                     <span className='grow text-center text-secondary'>{cant}</span>
                                     <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={handleSumar}>+</button>
                                 </div>
-                                <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleAgregarAlCarrito}>Agregar $ {price.toLocaleString('es-ES')}</button>
+                                <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleAgregarAlCarrito}>Agregar{dish?.categoryId !== 7 &&
+                                    ` $ ${price.toLocaleString('es-ES')}`}</button>
                             </div>
                         </>
                     )

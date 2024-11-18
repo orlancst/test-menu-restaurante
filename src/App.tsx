@@ -10,7 +10,6 @@ import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
 import establishments from "./data/establishments.json"
-import { Establishment } from './types';
 
 function App() {
   const queryParams = new URLSearchParams(window.location.search)
@@ -35,7 +34,6 @@ function App() {
       setHq(objEstablishment.hq)
       document.documentElement.setAttribute('data-theme', objEstablishment.branch);
     }
-    
 
   }, [queryParams])
 
@@ -53,7 +51,7 @@ function App() {
               <Route path='/cart' element={<Cart theme={theme} />} />
               <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
               <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} />} />
-              <Route path='/order-confirmed' element={<OrderConfirmed />} />
+              <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} />} />
             </Routes>
           </BrowserRouter>
 

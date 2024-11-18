@@ -43,14 +43,21 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
         const alreadyAdded = newCart.find((prod) => prod.id === itemAdded.id)
 
         if (alreadyAdded) {
-            if (addMore && alreadyAdded.cantidad < quantityLimit) {
+
+            //category ID = 7: Plan incluido
+            if (addMore && (alreadyAdded.categoryId !== 7 && alreadyAdded.cantidad < quantityLimit || alreadyAdded.categoryId === 7 && freeCartQuantity() < freeQuantityLimit)) {
+                
                 alreadyAdded.cantidad += cantidad;
             } else if (!addMore) {
+
                 alreadyAdded.cantidad = cantidad;
+
+                
             }
 
             alreadyAdded.comentario = comentario;
-        } else {
+        } else if (!alreadyAdded && (itemAdded.categoryId !== 7 || (itemAdded.categoryId === 7 && freeCartQuantity() < freeQuantityLimit))) {
+            
             newCart.push(itemAdded)
         }
 
@@ -84,6 +91,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         setCart(uCart)
 
+    }
+
+    const freeCartQuantity = ():number => {
+        const freeCart = cart.filter((c) => c.categoryId === 7)
+        return freeCart.reduce((acc, prod) => acc + prod.cantidad, 0)
+        
     }
 
     const cartQuantity = () => {

@@ -44,14 +44,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
     
     const handleSubmitOrder = async () => {
 
-        console.log(
-            {
-                "addedItems": adaptCartReq(cart),
-                "totalAmount": cartTotalPrice()
-            }
-        )
-
-
         setLoader(true)
         setLoaderMsj('Realizando pedido')
 
@@ -78,9 +70,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
             }
 
             const dataReceived = await response.json()
-            console.log(dataReceived);
+            localStorage.setItem('orderId', dataReceived.order.id)
 
-
+            navigate('/order-confirmed');
 
         } catch (error) {
             //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
@@ -92,10 +84,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
 
             setLoader(false)
         }
-
-
-        //cuando se confirme que se envio la orden, mandar a la ventana de orden confirmada
-        //navigate('/order-confirmed');
 
     }
 

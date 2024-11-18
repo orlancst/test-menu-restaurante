@@ -47,13 +47,12 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         if (data) {
             
             setDishes(data)
+            console.log(dishes);
             
         }
         
     }, [data])
     
-    
-
     const handleOpenDishDetail = (id: number) => {
  
         setIsDishDetailOpened(true);
@@ -67,7 +66,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     }
 
     if (loading) {
-        return <Loading />
+        return <Loading theme={theme} />
     }
 
     if (error || dishes.length === 0) {
