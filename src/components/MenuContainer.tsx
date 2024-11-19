@@ -22,7 +22,7 @@ interface MenuContainerProps {
 
 const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
-    const { addToCart, cartQuantity } = useContext(CartContext);
+    const { addToCart, cartQuantity, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
 
     const isCartEmpty = cartQuantity() > 0 ? false : true;
 
@@ -34,6 +34,8 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
     const { data, loading, error } = validateAccess('branch', 'room', $API_KEY)
     const { dataDish, errorDish, isDishLoading, fetchDishData } = findDish()
+
+    const [disableButton, setDisableButton] = useState<boolean>(false)
 
     useEffect(() => {
         askForData()
@@ -55,6 +57,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     
     const handleOpenDishDetail = (id: number) => {
  
+        setDisableButton(freeQuantityLimit === freeCartQuantity() ? true : false)
         setIsDishDetailOpened(true);
         //setDish(findDishData)
         fetchDishData(id, $API_KEY)
@@ -82,18 +85,34 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                 {
                     dishes.map((dish, index) => {
                         const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
+                        const isIncluded = dish.categoryId === 7 ? true : false;
                         return (
                             <div key={dish.id} id={showCat ? `#${dish.categoryName.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                 {
                                     showCat &&
-                                    <h3 className="text-3xl uppercase font-bold mb-2 text-primary">{dish.categoryName}</h3>
+                                    <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.categoryName}</h3>
                                 }
-                                <h4 className="text-xl font-semibold text-secondary" onClick={() => {handleOpenDishDetail(dish.id)}}>{dish.name}</h4>
-                                <p className="text-secondary text-sm">{shortenParagraph(dish.description, 70)}</p>
+                                <h4 className="text-lg font-semibold text-secondary" onClick={() => {handleOpenDishDetail(dish.id)}}>{dish.name}</h4>
+                                <p className="text-secondary text-xs">{shortenParagraph(dish.description, 80)}</p>
 
                                 <div className="flex flex-row justify-between mb-3">
                                     <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-ES')}</span>
-                                    <button className="w-7 bg-primary text-secondary rounded text-xl" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
+
+                                    {
+                                        (!isIncluded) ?
+                                        <button className="w-7 bg-primary text-secondary rounded text-xl border border-primary" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
+                                        :
+                                        <>
+                                            {
+                                                freeQuantityLimit !== freeCartQuantity() ?
+                                                <button className="w-7 bg-primary text-secondary rounded text-xl border border-primary" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
+                                                :
+                                                <button className="w-7 bg-transparent text-primary rounded text-xl border border-primary">+</button>
+                                            }
+                                        
+                                        </>
+                                    }
+
 
                                 </div>
                                 <hr className="h-0 border-t-1 mb-4" />
@@ -109,8 +128,8 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             }
 
 
-            <DishDetail dish={dataDish} loadDish={isDishLoading} onDishErr={errorDish} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} handleAddToCart={addToCart} />
-            <Sidebar dishes={dishes} isSidebarOpened={isSidebarOpened} setIsSidebarOpened={setIsSidebarOpened} />
+            <DishDetail dish={dataDish} loadDish={isDishLoading} onDishErr={errorDish} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} handleAddToCart={addToCart} disableButton={disableButton} theme={theme} />
+            <Sidebar dishes={dishes} isSidebarOpened={isSidebarOpened} setIsSidebarOpened={setIsSidebarOpened} theme={theme} />
 
         </>
     )

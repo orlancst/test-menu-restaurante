@@ -33,9 +33,9 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
     return (
         <>
             <div className='flex flex-col h-lvh text-secondary'>
-                <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
+                <div className={`${theme === 'carpediem' ? 'bg-neutral' : 'bg-accent'} h-[90px] p-5 flex justify-between items-center`}>
                     <button onClick={() => { navigate(`/${search}`) }} className="flex items-center">
-                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#ffffff' : '#ff5800'} />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
                     </button>
                     <div className="flex flex-col">
@@ -43,7 +43,7 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                         <span className="text-xl font-bold">$ {cartTotalPrice().toLocaleString('es-ES')}</span>
                     </div>
                 </div>
-                <div className='bg-neutral grow flex flex-col justify-between'>
+                <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col justify-between`}>
 
                     <div className='p-5 pb-0 flex flex-col'>
 
@@ -57,6 +57,8 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
 
                         {
                             cart.map((item) => {
+
+                                const isIncluded = item.categoryId !== 7 ? false : true;
 
                                 return (
                                     <div key={item.name} className='flex flex-col'>
@@ -76,13 +78,13 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                                             </div>
                                             <div>
                                                 <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
-                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={() => { modifyDishQuantityOnCart(item.id, false) }}>
+                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={() => { modifyDishQuantityOnCart(item.id, false, isIncluded) }}>
                                                         {
                                                             item.cantidad !== 1 ? '-' : <TrashCanIcon />
                                                         }
                                                     </button>
                                                     <span className='grow text-center text-secondary'>{item.cantidad}</span>
-                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={() => { modifyDishQuantityOnCart(item.id, true) }}>+</button>
+                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={() => { modifyDishQuantityOnCart(item.id, true, isIncluded) }}>+</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,19 +105,19 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
 
                                 <div className='text-center py-5'>
 
-                                    <button onClick={goToVerify} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
+                                    <button onClick={goToVerify} className={`btn ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`}>Continuar con mi pedido</button>
 
                                 </div>
                             </>
                             :
                             <div className='text-center py-5'>
-                                <button onClick={() => { navigate(`/${search}`) }} className="btn rounded-full px-6 bg-primary text-secondary font-bold">Regresar al menú</button>
+                                <button onClick={() => { navigate(`/${search}`) }} className={`btn ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`}>Regresar al menú</button>
                             </div>
                     }
                 </div>
             </div>
 
-            <ModifyComment idProd={idProd} cart={cart} isModifyCommentsOpened={isModifyCommentsOpened} setIsModifyCommentsOpened={setIsModifyCommentsOpened} handleAddToCart={addToCart} />
+            <ModifyComment idProd={idProd} cart={cart} isModifyCommentsOpened={isModifyCommentsOpened} setIsModifyCommentsOpened={setIsModifyCommentsOpened} handleAddToCart={addToCart} theme={theme} />
         </>
     )
 }

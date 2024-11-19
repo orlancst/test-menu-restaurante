@@ -11,18 +11,24 @@ interface DrawerProps {
     isDishDetailOpened: boolean;
     setIsDishDetailOpened: React.Dispatch<React.SetStateAction<boolean>>;
     handleAddToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
+    disableButton: boolean;
+    theme: string;
 }
 
 
 const DishDetail: React.FC<DrawerProps> = (props) => {
 
-    const { dish, loadDish, onDishErr, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart } = props
+    const { dish, loadDish, onDishErr, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart, disableButton, theme } = props
     //const [dish, setDish] = useState<Dish>({} as Dish)
     const [cant, setCant] = useState(1);
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
 
-    const { cart, quantityLimit, freeQuantityLimit } = useContext(CartContext);
+    const { cart, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
+
+    const isDishIncluded: boolean = dish?.categoryId === 7 ? true : false;
+
+
 
     // const { findDishData, findDisherror } = findDish(idProd, $API_KEY)
 
@@ -38,13 +44,13 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
         if (dish?.categoryId !== 7) {
             cant < quantityLimit && setCant(cant + 1)
-            
+
         } else {
-            
+
             cant < freeQuantityLimit && setCant(cant + 1)
 
         }
-        
+
     }
 
     useEffect(() => {
@@ -61,7 +67,6 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
         setIsDishDetailOpened(false);
         setTimeout(() => {
             setCant(1);
-
             setCommentValue("")
 
         }, 250);
@@ -92,6 +97,13 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     }
 
+    const handleAgregarUnoAlCarrito = () => {
+
+        handleAddToCart(dish as Dish, 1, commentValue, true)
+        closeDrawer()
+
+    }
+
     useEffect(() => {
         if (dish && dish.price) {
             setPrice(dish.price * cant)
@@ -112,7 +124,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
             direction='bottom'
             className='bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior'
             style={{
-                backgroundColor: '#4f0b7b',
+                backgroundColor: `${theme === 'carpediem' ? '#7a142a' : '#4f0b7b'}`,
                 height: 'auto',
             }}
             lockBackgroundScroll
@@ -127,6 +139,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
                         <p className='text-center text-sm text-secondary'>¡Ups! Ha ocurrido un error.</p>
                     ) : (
                         <>
+
                             <h3 className='font-semibold text-xl mt-3 text-secondary'>{dish?.name}</h3>
                             <p className='text-secondary text-xs leading-4 mt-2'>
                                 {dish?.description}
@@ -141,14 +154,29 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
                                 <label htmlFor="dish-comment" className='text-sm text-secondary mb-1'>Comentarios</label>
                                 <textarea name="dish-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-xs p-2 focus:outline-none' onChange={handleChangeComment}></textarea>
                             </form>
-                            <div className="flex flex-row justify-center gap-x-5 mt-6">
-                                <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
-                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={handleRestar}>-</button>
-                                    <span className='grow text-center text-secondary'>{cant}</span>
-                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={handleSumar}>+</button>
-                                </div>
-                                <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleAgregarAlCarrito}>Agregar{dish?.categoryId !== 7 &&
-                                    ` $ ${price.toLocaleString('es-ES')}`}</button>
+
+                            <div className="flex flex-row flex-wrap justify-center gap-x-5 mt-6">
+                                {
+                                    !isDishIncluded ?
+                                        <>
+                                            <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
+                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 ml-1`} onClick={handleRestar}>-</button>
+                                                <span className='grow text-center text-secondary'>{cant}</span>
+                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 mr-1`} onClick={handleSumar}>+</button>
+                                            </div>
+                                            <button className={`${theme === 'carpediem' ? 'rounded-xl px-4 bg-secondary text-primary font-semibold' : 'rounded-full px-6 bg-primary text-secondary font-bold'} text-sm leading-none h-9`} onClick={handleAgregarAlCarrito}>Agregar
+                                                 $ {price.toLocaleString('es-ES')}</button>
+                                        </>
+                                        :
+                                        <>
+                                            <button className={`${!disableButton ? 'rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9' : 'rounded-full btn-disabled px-4 bg-transparent text-primary font-semibold text-sm leading-none h-9 border border-primary'} `} onClick={handleAgregarUnoAlCarrito}>Agregar al carrito</button>
+                                            {
+                                                disableButton &&
+                                                <span className='text-xs italic text-secondary text-center mt-2 px-5'>Has alcanzado la cantidad de platos que puedes pedir como obsequio.</span>
+                                            }
+                                        </>
+                                }
+                                
                             </div>
                         </>
                     )

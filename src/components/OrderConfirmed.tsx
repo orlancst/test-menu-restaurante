@@ -31,7 +31,7 @@ const OrderConfirmed: React.FC<OrderConfirmedProps> = ({ theme }) => {
                     loaderMsj={loaderMsj} />
             }
 
-            <div className={`flex flex-col justify-center mx-8 ${!isSurveySubmitted ? 'my-12 min-h-lvh' : 'h-lvh'}`}>
+            <div className={`flex flex-col justify-center px-8 ${!isSurveySubmitted ? 'py-12 min-h-lvh' : 'h-lvh'}`}>
                 {!isSurveySubmitted ?
                     <Survey theme={theme} orderId={orderId} setIsOrderSumbit={setIsSurveySubmitted} setLoader={setLoader} setLoaderMsj={setLoaderMsj} /> : <ThankYouPage theme={theme} />
                 }

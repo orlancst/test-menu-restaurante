@@ -132,13 +132,13 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
             loader && <LoaderMask loaderMsj={loaderMsj} />
         }
 
-            <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
+            <div className={`${theme === 'carpediem' ? 'bg-neutral' : 'bg-accent'} h-[90px] p-5 flex justify-between items-center`}>
                 <button onClick={() => { navigate(`/cart${search}`) }} className="flex items-center">
-                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                        <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#ffffff' : '#ff5800'} />
                         <span className="font-semibold text-xl ml-1">Atrás</span>
                 </button>
             </div>
-            <div className='bg-neutral grow flex flex-col items-center'>
+            <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col items-center`}>
 
                 <form action="" onSubmit={handleCheck} className="w-3/4 py-7">
                     <label htmlFor="room-number" className="uppercase text-sm text-start font-semibold">Ingresa número de habitación</label>
@@ -149,7 +149,7 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
 
 
                     <div className='text-center pt-7'>
-                        <button type="submit" className="btn rounded-full px-6 bg-primary text-secondary font-bold">Continuar con mi pedido</button>
+                        <button type="submit" className={`btn ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`}>Continuar con mi pedido</button>
                     </div>
                 </form>
 
@@ -165,7 +165,7 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
                 </div>
             </div>
 
-            <ModalAlert message={message} />
+            <ModalAlert message={message} theme={theme} />
 
         </div>
     )

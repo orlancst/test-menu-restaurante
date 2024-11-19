@@ -47,8 +47,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
         setLoader(true)
         setLoaderMsj('Realizando pedido')
 
+        console.dir({
+            "addedItems": adaptCartReq(cart),
+            "totalAmount": cartTotalPrice()
+        });
+        
+
         try {
-            console.log(accessKey);
 
             const response = await fetch(`${$API_KEY}orders`, {
                 method: 'POST',
@@ -100,13 +105,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
                 loader && <LoaderMask loaderMsj={loaderMsj} />
             }
 
-            <div className='bg-accent h-[90px] p-5 flex justify-between items-center'>
+            <div className={`${theme === 'carpediem' ? 'bg-neutral' : 'bg-accent'} h-[90px] p-5 flex justify-between items-center`}>
                 <button onClick={() => { navigate(`/verify${search}`) }} className="flex items-center">
-                    <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                    <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#ffffff' : '#ff5800'} />
                     <span className="font-semibold text-xl ml-1">Atrás</span>
                 </button>
             </div>
-            <div className='bg-neutral grow flex flex-col'>
+            <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col items-center`}>
 
                 <h1 className="uppercase font-bold text-xl text-primary mt-5 text-center">Resumen de tu pedido</h1>
 
@@ -120,7 +125,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
                                     <span className="w-40 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
                                         {item.name}
                                     </span>
-                                    <span>{item.cantidad}</span>
+                                    <span className="mx-3">{item.cantidad}</span>
                                     <span className="w-24 text-right font-bold">$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                 </div>
                             )
@@ -139,14 +144,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
                 {
                     cart.length > 0 &&
                     <div className="flex flex-row justify-center gap-x-2">
-                        <button className="btn btn-sm rounded-full px-4 bg-primary text-secondary font-semibold" onClick={handleSubmitOrder}>Confirmar pedido</button>
+                        <button className={`btn btn-sm ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`} onClick={handleSubmitOrder}>Confirmar pedido</button>
                     </div>
 
                 }
 
             </div>
 
-            <ModalAlert message={message} />
+            <ModalAlert message={message} theme={theme} />
 
         </div>
     )

@@ -4,13 +4,17 @@ import 'react-modern-drawer/dist/index.css'
 import { SidebarProps } from '../types';
 
 
-const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebarOpened }) => {
+const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebarOpened, theme }) => {
 
     const closeSidebar = () => {
         setIsSidebarOpened(false);
     }
 
     //console.log(dishes, typeof(dishes));
+
+    const styles = {
+        backgroundColor: `${theme === 'carpediem' ? '#7a142a' : '#4f0b7b'}`,
+    }
     
 
     const categories = [...new Set(dishes.map(dish => dish.categoryName))]
@@ -32,6 +36,8 @@ const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebar
         
     }
 
+    // ${theme === 'carpediem' ? '#7a142a' : '#4f0b7b'}
+
     return (
         <div>
             <Drawer
@@ -39,10 +45,8 @@ const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebar
                 onClose={closeSidebar}
                 direction='left'
                 className='bg-neutral py-5 rounded-tr-xl border-t-1 border-t-black shadow-superior'
-                style={{
-                    backgroundColor: '#4f0b7b',
-
-                }}
+                
+                style={styles}
                 lockBackgroundScroll
             >
                 <div className='flex flex-col'>

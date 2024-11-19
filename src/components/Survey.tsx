@@ -155,14 +155,14 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
                         }
 
                         <div className="flex justify-center mt-5">
-                            <button type="submit" className="btn rounded-full px-6 bg-primary text-secondary font-bold">Enviar respuestas</button>
+                            <button type="submit" className={`btn ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`}>Enviar respuestas</button>
                         </div>
 
                     </form>
                 </>
             }
 
-            <ModalAlert message={message} />
+            <ModalAlert message={message} theme={theme} />
 
         </>
     )

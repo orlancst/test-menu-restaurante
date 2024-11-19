@@ -7,8 +7,9 @@ interface MiContexto {
     cartQuantity: () => number;
     cartTotalPrice: () => number;
     quantityLimit: number;
-    freeQuantityLimit: number; 
-    modifyDishQuantityOnCart: (dishId: number, add: boolean) => void;
+    freeQuantityLimit: number;
+    freeCartQuantity: () => number;
+    modifyDishQuantityOnCart: (dishId: number, add: boolean, isIncluded: boolean) => void;
 }
 
 interface CartProviderProps {
@@ -22,6 +23,7 @@ export const CartContext = createContext<MiContexto>({
     cartTotalPrice: () => 0,
     quantityLimit: 5,
     freeQuantityLimit: 2,
+    freeCartQuantity: () => 0,
     modifyDishQuantityOnCart: () => { },
 });
 
@@ -65,7 +67,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
         
     }
 
-    const modifyDishQuantityOnCart = (dishId: number, add: boolean) => {
+    const modifyDishQuantityOnCart = (dishId: number, add: boolean, isIncluded: boolean) => {
 
         const uCart = [...cart]
         const auxCart = uCart.find((prod) => prod.id === dishId)
@@ -73,7 +75,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
         if (auxCart) {
             if (add) {
     
-                if (auxCart.cantidad < quantityLimit) {
+                if ((!isIncluded && auxCart.cantidad < quantityLimit) || (isIncluded && freeCartQuantity() < freeQuantityLimit)) {
                     auxCart.cantidad ++ ;
                 }
     
@@ -119,6 +121,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             cartTotalPrice,
             quantityLimit,
             freeQuantityLimit,
+            freeCartQuantity,
             modifyDishQuantityOnCart,
             }}>
 

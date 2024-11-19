@@ -62,6 +62,7 @@ export interface CartUser extends Dish {
 export interface SidebarProps extends Dishes {
     isSidebarOpened: boolean;
     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
+    theme: string;
 }
 
 export interface OrderCheckCredentials {
