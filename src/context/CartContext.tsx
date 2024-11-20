@@ -10,6 +10,7 @@ interface MiContexto {
     freeQuantityLimit: number;
     freeCartQuantity: () => number;
     modifyDishQuantityOnCart: (dishId: number, add: boolean, isIncluded: boolean) => void;
+    emptyCart: () => void;
 }
 
 interface CartProviderProps {
@@ -25,6 +26,7 @@ export const CartContext = createContext<MiContexto>({
     freeQuantityLimit: 2,
     freeCartQuantity: () => 0,
     modifyDishQuantityOnCart: () => { },
+    emptyCart: () => { },
 });
 
 const $cart: CartUser[] = JSON.parse(localStorage.getItem("cart") || '[]') as CartUser[]
@@ -53,7 +55,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             } else if (!addMore) {
 
                 alreadyAdded.cantidad = cantidad;
-
                 
             }
 
@@ -95,6 +96,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
     }
 
+    const emptyCart = () => {
+        setCart([])
+        localStorage.removeItem("cart")
+    }
+
     const freeCartQuantity = ():number => {
         const freeCart = cart.filter((c) => c.categoryId === 7)
         return freeCart.reduce((acc, prod) => acc + prod.cantidad, 0)
@@ -123,6 +129,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             freeQuantityLimit,
             freeCartQuantity,
             modifyDishQuantityOnCart,
+            emptyCart
             }}>
 
             {children}

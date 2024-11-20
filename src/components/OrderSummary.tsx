@@ -12,9 +12,10 @@ const $API_KEY: string = import.meta.env.VITE_API_KEY;
 interface OrderSummaryProps {
     theme: string;
     accessKey: string;
+    setAccessKey: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
+const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccessKey }) => {
 
     const { cart, cartTotalPrice } = useContext(CartContext);
     const navigate = useNavigate();
@@ -31,6 +32,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
         }
 
     }, [accessKey])
+
+    useEffect(() => {
+        if (localStorage.getItem('accessKey')) {
+            setAccessKey(localStorage.getItem('accessKey') as string)
+        }
+    }, [])
 
     const showModalError = (msg: string) => {
         const modal = document.getElementById('modalInvalidData') as HTMLDialogElement | null
@@ -91,6 +98,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey }) => {
         }
 
     }
+
+    useEffect(() => {
+        if (cart.length === 0) {
+            navigate(`/${search}`)
+        }
+
+    }, [])
+
 
     if (!accessKey && localStorage.getItem('accessKey') === '') {
         return (

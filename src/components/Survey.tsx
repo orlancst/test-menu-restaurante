@@ -132,15 +132,19 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
                                     <div key={index} >
                                         <label htmlFor="" className="text-secondary font-medium text-sm">
                                             {index + 1}. {question.statement}
+                                            {
+                                                question.required &&
+                                                <span className="text-primary ml-1">*</span>
+                                            }
                                         </label>
                                         {
                                             (question.answers.length > 0) ?
-                                                <div className="flex flex-row mt-2 mb-5">
+                                                <div className="flex flex-col gap-y-2 mt-2 mb-5">
 
                                                     {
                                                         question.answers.map((answer, ind) => {
                                                             return (
-                                                                <label key={ind} className="flex items-center w-1/2"><input type="radio" name={`question-${index + 1}`} className="radio radio-xs radio-primary mr-2" value={answer} onChange={(e) => handleChange(question.id, e.target.value)} required={question.required} /> <span className="text-secondary text-xs font-light" >{answer}</span></label>
+                                                                <label key={ind} className="flex items-center"><input type="radio" name={`question-${index + 1}`} className="radio radio-xs radio-primary mr-2" value={answer} onChange={(e) => handleChange(question.id, e.target.value)} required={question.required} /> <span className="text-secondary text-xs font-light" >{answer}</span></label>
                                                             )
                                                         })
                                                     }

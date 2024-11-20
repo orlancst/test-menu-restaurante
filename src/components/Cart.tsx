@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import LeftArrowIcon from "../assets/svg/LeftArrowIcon"
 import TrashCanIcon from '../assets/svg/TrashCanIcon'
+import PlusIcon from '../assets/svg/PlusIcon'
+import MinusIcon from '../assets/svg/MinusIcon'
 import EditCommentIcon from '../assets/svg/EditCommentIcon'
 import { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
@@ -80,11 +82,13 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                                                 <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
                                                     <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semiboldbold bg-primary rounded-full w-6 h-6 ml-1' onClick={() => { modifyDishQuantityOnCart(item.id, false, isIncluded) }}>
                                                         {
-                                                            item.cantidad !== 1 ? '-' : <TrashCanIcon />
+                                                            item.cantidad !== 1 ? <MinusIcon fillColor='white' /> : <TrashCanIcon />
                                                         }
                                                     </button>
                                                     <span className='grow text-center text-secondary'>{item.cantidad}</span>
-                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={() => { modifyDishQuantityOnCart(item.id, true, isIncluded) }}>+</button>
+                                                    <button className='grow-0 grid place-items-center text-lg leading-none text-secondary font-semibold bg-primary rounded-full w-6 h-6 mr-1' onClick={() => { modifyDishQuantityOnCart(item.id, true, isIncluded) }}>
+                                                        <PlusIcon fillColor='white' />
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>

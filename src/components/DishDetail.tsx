@@ -3,6 +3,8 @@ import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import { Dish } from '../types';
 import { CartContext } from '../context/CartContext';
+import PlusIcon from '../assets/svg/PlusIcon'
+import MinusIcon from '../assets/svg/MinusIcon'
 
 interface DrawerProps {
     dish: Dish | null;
@@ -160,9 +162,13 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
                                     !isDishIncluded ?
                                         <>
                                             <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
-                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 ml-1`} onClick={handleRestar}>-</button>
+                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 ml-1`} onClick={handleRestar}>
+                                                    <MinusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                </button>
                                                 <span className='grow text-center text-secondary'>{cant}</span>
-                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 mr-1`} onClick={handleSumar}>+</button>
+                                                <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 mr-1`} onClick={handleSumar}>
+                                                    <PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                </button>
                                             </div>
                                             <button className={`${theme === 'carpediem' ? 'rounded-xl px-4 bg-secondary text-primary font-semibold' : 'rounded-full px-6 bg-primary text-secondary font-bold'} text-sm leading-none h-9`} onClick={handleAgregarAlCarrito}>Agregar
                                                  $ {price.toLocaleString('es-ES')}</button>

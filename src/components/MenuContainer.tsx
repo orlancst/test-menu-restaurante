@@ -12,6 +12,7 @@ import { CartContext } from "../context/CartContext"
 import { validateAccess } from "../hooks/validateAccess"
 import { findDish } from "../hooks/findDish"
 import UnavailableAccess from "./UnavailableAccess"
+import PlusIcon from '../assets/svg/PlusIcon'
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -38,6 +39,14 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     const [disableButton, setDisableButton] = useState<boolean>(false)
 
     useEffect(() => {
+
+        if (localStorage.getItem('orderId')) {
+            localStorage.removeItem('orderId')
+        }
+
+    }, [])
+
+    useEffect(() => {
         askForData()
             .then((res) => {
                 setProds(res)
@@ -47,16 +56,20 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     useEffect(() => {
 
         if (data) {
-            
-            setDishes(data)
-            console.log(dishes);
-            
+
+            if (data.length > 0) {
+
+                setDishes(data)
+
+            }
+
+
         }
-        
+
     }, [data])
-    
+
     const handleOpenDishDetail = (id: number) => {
- 
+
         setDisableButton(freeQuantityLimit === freeCartQuantity() ? true : false)
         setIsDishDetailOpened(true);
         //setDish(findDishData)
@@ -72,7 +85,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         return <Loading theme={theme} />
     }
 
-    if (error || dishes.length === 0) {
+    if (error) {
         return <UnavailableAccess theme={theme} />
     }
 
@@ -83,7 +96,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             <div className="flex flex-col mx-4 my-3">
 
                 {
-                    dishes.map((dish, index) => {
+                    dishes?.map((dish, index) => {
                         const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
                         const isIncluded = dish.categoryId === 7 ? true : false;
                         return (
@@ -92,27 +105,31 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                     showCat &&
                                     <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.categoryName}</h3>
                                 }
-                                <h4 className="text-lg font-semibold text-secondary" onClick={() => {handleOpenDishDetail(dish.id)}}>{dish.name}</h4>
-                                <p className="text-secondary text-xs">{shortenParagraph(dish.description, 80)}</p>
+
+                                <div onClick={() => { handleOpenDishDetail(dish.id) }}>
+
+                                    <h4 className="text-lg font-semibold text-secondary" >{dish.name}</h4>
+                                    <p className="text-secondary text-xs">{shortenParagraph(dish.description, 75)} <span className="text-primary font-semibold ml-1">Ver más</span></p>
+                                </div>
+
 
                                 <div className="flex flex-row justify-between mb-3">
                                     <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-ES')}</span>
 
                                     {
                                         (!isIncluded) ?
-                                        <button className="w-7 bg-primary text-secondary rounded text-xl border border-primary" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
-                                        :
-                                        <>
-                                            {
-                                                freeQuantityLimit !== freeCartQuantity() ?
-                                                <button className="w-7 bg-primary text-secondary rounded text-xl border border-primary" onClick={() => {addToCart(dish, 1, "", true)}}>+</button>
-                                                :
-                                                <button className="w-7 bg-transparent text-primary rounded text-xl border border-primary">+</button>
-                                            }
-                                        
-                                        </>
-                                    }
+                                            <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                            :
+                                            <>
+                                                {
+                                                    freeQuantityLimit !== freeCartQuantity() ?
+                                                        <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                                        :
+                                                        <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center"><PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} /></button>
+                                                }
 
+                                            </>
+                                    }
 
                                 </div>
                                 <hr className="h-0 border-t-1 mb-4" />

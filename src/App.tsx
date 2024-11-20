@@ -10,6 +10,7 @@ import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
 import establishments from "./data/establishments.json"
+import Loading from './components/Loading';
 
 function App() {
   const queryParams = new URLSearchParams(window.location.search)
@@ -38,7 +39,7 @@ function App() {
   }, [queryParams])
 
   return (
-    <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'}`}>
+    <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'} select-none`}>
 
 
         <CartProvider>
@@ -50,8 +51,9 @@ function App() {
               {/* <Route path='/' element={<UnavailableAccess />} /> */}
               <Route path='/cart' element={<Cart theme={theme} />} />
               <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
-              <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} />} />
-              <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} />} />
+              <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} setAccessKey={setAccessKey} />} />
+              <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} setAccessKey={setAccessKey} />} />
+              <Route path='/theme' element={<Loading theme={theme} />} />
             </Routes>
           </BrowserRouter>
 

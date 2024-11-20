@@ -32,6 +32,8 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
     const [loader, setLoader] = useState<boolean>(false)
     const [loaderMsj, setLoaderMsj] = useState<string>('')
 
+    const regExpNumber = /[^0-9]/g;
+
     useEffect(() => {
         if (localStorage.getItem('accessKey') !== '') {
             localStorage.removeItem('accessKey')
@@ -142,10 +144,20 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
 
                 <form action="" onSubmit={handleCheck} className="w-3/4 py-7">
                     <label htmlFor="room-number" className="uppercase text-sm text-start font-semibold">Ingresa número de habitación</label>
-                    <input type="text" name="room-number" autoComplete="off" maxLength={3} className="bg-transparent border-b focus:outline-none w-full px-4 mb-3" onChange={(e) => setInputRoomNumber(e.target.value)} />
+                    <input type="text" name="room-number" autoComplete="off" maxLength={3} pattern="\d+" required className="bg-transparent border-b focus:outline-none w-full px-4 mb-3" onChange={(e) => {
+                        const value = e.target.value;
+                        e.target.value = value.replace(regExpNumber, "")
+                        setInputRoomNumber(e.target.value)
+                        
+                    }} />
 
                     <label htmlFor="room-code" className="uppercase text-sm text-start font-semibold">Ingresa código de habitación</label>
-                    <input type="text" name="room-code" autoComplete="off" maxLength={5} className="bg-transparent border-b focus:outline-none w-full px-4 uppercase" onChange={(e) => setInputRoomCode(e.target.value)} />
+                    <input type="text" name="room-code" autoComplete="off" maxLength={5} pattern="\d+" required className="bg-transparent border-b focus:outline-none w-full px-4 uppercase" onChange={(e) => {
+                        const value = e.target.value;
+                        e.target.value = value.replace(regExpNumber, "")
+                        setInputRoomCode(e.target.value)
+                        
+                    }} />
 
 
                     <div className='text-center pt-7'>

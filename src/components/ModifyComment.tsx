@@ -92,7 +92,7 @@ const ModifyComment: React.FC<ModifyCommentProps> = ({ idProd, cart, isModifyCom
                 </form>
                 <div className="flex flex-row justify-center gap-x-5 mt-6">
 
-                    <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleEditomment}>Editar comentario</button>
+                    <button className="rounded-full px-4 bg-primary text-secondary font-bold text-sm leading-none h-9" onClick={handleEditomment}>Actualizar comentario</button>
                 </div>
             </div>
 
