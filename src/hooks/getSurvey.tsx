@@ -18,11 +18,8 @@ export const getSurvey = (endpointUrl: string): QueryData => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-
-
     const apiCall = async () => {
         let list = [];
-
 
         try {
 
@@ -44,9 +41,7 @@ export const getSurvey = (endpointUrl: string): QueryData => {
 
         apiCall()
 
-
     }, [endpointUrl])
-
 
     return { data, error, loading }
 }

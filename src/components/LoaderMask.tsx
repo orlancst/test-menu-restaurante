@@ -4,7 +4,6 @@ interface LoaderMaskProps {
   loaderMsj: string;
 }
 
-
 const LoaderMask:React.FC<LoaderMaskProps> = ({loaderMsj}) => {
   return (
     <div className='fixed z-50 bg-[#00000069] w-full h-lvh text-center flex items-center justify-center gap-x-3 overflow-y-hidden'>

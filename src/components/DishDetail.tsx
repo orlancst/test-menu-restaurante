@@ -29,14 +29,9 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     const { cart, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
 
     const isDishIncluded: boolean = dish?.categoryId === 7 ? true : false;
-
-
-
-    // const { findDishData, findDisherror } = findDish(idProd, $API_KEY)
-
+ 
     const txtarea: HTMLTextAreaElement = document.querySelector('textarea[name="dish-comment"]')!
-
-    //console.log(loading);
+ 
 
     const handleRestar = () => {
         cant > 1 && setCant(cant - 1)
@@ -163,11 +158,11 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
                                         <>
                                             <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>
                                                 <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 ml-1`} onClick={handleRestar}>
-                                                    <MinusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                    <MinusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ffffff'} />
                                                 </button>
                                                 <span className='grow text-center text-secondary'>{cant}</span>
                                                 <button className={`grow-0 grid place-items-center text-lg leading-none ${theme === 'carpediem' ? 'text-primary bg-secondary' : 'text-secondary bg-primary'} font-semibold rounded-full w-6 h-6 mr-1`} onClick={handleSumar}>
-                                                    <PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                    <PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ffffff'} />
                                                 </button>
                                             </div>
                                             <button className={`${theme === 'carpediem' ? 'rounded-xl px-4 bg-secondary text-primary font-semibold' : 'rounded-full px-6 bg-primary text-secondary font-bold'} text-sm leading-none h-9`} onClick={handleAgregarAlCarrito}>Agregar

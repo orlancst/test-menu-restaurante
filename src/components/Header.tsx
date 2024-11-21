@@ -23,7 +23,6 @@ const Header: React.FC<HeaderProps> = ({ theme, hq }) => {
         theme === 'carpediem' ? 100 : 200
       } className="py-2" />
 
-
       {
         theme === 'carpediem' ?
           <h1 className="font-bold text-secondary text-2xl">{hq.toUpperCase()}</h1>

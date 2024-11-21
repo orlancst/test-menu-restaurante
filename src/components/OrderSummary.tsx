@@ -48,7 +48,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
 
         }
     }
-    
+
     const handleSubmitOrder = async () => {
 
         setLoader(true)
@@ -58,7 +58,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
             "addedItems": adaptCartReq(cart),
             "totalAmount": cartTotalPrice()
         });
-        
+
 
         try {
 
@@ -76,8 +76,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
             })
 
             if (!response.ok) {
-                console.log(response);
-
                 throw new Error('Hubo un problema con la petición al server.')
             }
 
@@ -131,6 +129,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                 <h1 className="uppercase font-bold text-xl text-primary mt-5 text-center">Resumen de tu pedido</h1>
 
                 <div className="flex flex-col mx-8 py-7 text-sm">
+
+                    <div className="flex flex-row justify-between items-start border-b pb-1 mb-2 text-xs">
+                        <span className="w-40 whitespace-nowrap">
+                            PLATO
+                        </span>
+                        <span className="mx-3">CANT.</span>
+                        <span className="w-24 text-right">PRECIO</span>
+                    </div>
 
                     {
                         cart.map((item) => {

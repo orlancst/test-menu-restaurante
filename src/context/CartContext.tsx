@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { Plato, UserCart, Dish, CartUser } from "../types";
+import { Dish, CartUser } from "../types";
 
 interface MiContexto {
     cart: CartUser[];

@@ -48,7 +48,7 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                 <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col justify-between`}>
 
                     <div className='p-5 pb-0 flex flex-col'>
-
+        
 
                         {
                             cart.length === 0 &&
@@ -67,16 +67,16 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                                         <div className='flex justify-between items-end'>
                                             <div className='flex flex-col'>
                                                 <span className='font-medium'>{item.name}</span>
+                                                <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                                 {
                                                     item.comentario !== '' ? (
                                                         <>
-                                                            <span className='font-light text-xs italic'>{item.comentario}</span>
-                                                            <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Editar comentarios</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
+                                                            <span className='font-light text-xs italic __prevent_nowrap_comments'>{item.comentario}</span>
+                                                            <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-lg underline' onClick={handleOpenModifyComment(item.id)}>Editar comentarios</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
                                                         </>
 
-                                                    ) : <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-xs underline' onClick={handleOpenModifyComment(item.id)}>Agregar comentario</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
+                                                    ) : <button className='inline-flex gap-x-1 items-center'><span className='font-light text-primary text-lg underline' onClick={handleOpenModifyComment(item.id)}>Agregar comentario</span><EditCommentIcon stroke={theme === 'carpediem' ? '#df0067' : '#ff5800'} /> </button>
                                                 }
-                                                <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
                                             </div>
                                             <div>
                                                 <div className='border border-white rounded-full flex flex-row items-center w-24 h-9'>

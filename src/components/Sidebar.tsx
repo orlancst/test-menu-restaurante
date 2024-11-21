@@ -1,8 +1,7 @@
-import { useState } from 'react';
+
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import { SidebarProps } from '../types';
-
 
 const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebarOpened, theme }) => {
 
@@ -10,15 +9,10 @@ const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebar
         setIsSidebarOpened(false);
     }
 
-    //console.log(dishes, typeof(dishes));
-
     const styles = {
         backgroundColor: `${theme === 'carpediem' ? '#7a142a' : '#4f0b7b'}`,
     }
-    
-
     const categories = [...new Set(dishes.map(dish => dish.categoryName))]
-
     const categoryCount = categories.map(category => {
         const count = dishes.filter(dish => dish.categoryName === category).length
 

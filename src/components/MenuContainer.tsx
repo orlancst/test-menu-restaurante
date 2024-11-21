@@ -5,9 +5,8 @@ import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
 import Loading from "./Loading"
 import { useContext, useEffect, useState } from "react"
-import { askForData } from "../helpers/getExampleData";
 import { shortenParagraph } from "../helpers/utils"
-import { Dish, Plato } from "../types";
+import { Dish } from "../types";
 import { CartContext } from "../context/CartContext"
 import { validateAccess } from "../hooks/validateAccess"
 import { findDish } from "../hooks/findDish"
@@ -23,19 +22,13 @@ interface MenuContainerProps {
 
 const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
-    const { addToCart, cartQuantity, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
-
+    const { cart, addToCart, cartQuantity, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
     const isCartEmpty = cartQuantity() > 0 ? false : true;
-
-    const [prods, setProds] = useState<Plato[]>([]);
     const [dishes, setDishes] = useState<Dish[]>([]);
-
     const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
     const [isSidebarOpened, setIsSidebarOpened] = useState(false);
-
     const { data, loading, error } = validateAccess('branch', 'room', $API_KEY)
     const { dataDish, errorDish, isDishLoading, fetchDishData } = findDish()
-
     const [disableButton, setDisableButton] = useState<boolean>(false)
 
     useEffect(() => {
@@ -47,13 +40,6 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     }, [])
 
     useEffect(() => {
-        askForData()
-            .then((res) => {
-                setProds(res)
-            })
-    }, [prods])
-
-    useEffect(() => {
 
         if (data) {
 
@@ -62,7 +48,6 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                 setDishes(data)
 
             }
-
 
         }
 
@@ -99,6 +84,11 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                     dishes?.map((dish, index) => {
                         const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
                         const isIncluded = dish.categoryId === 7 ? true : false;
+
+                        //validar si el producto seleccionado alcanzó el tope permitido para agregar al carrito
+                        const isOnCart = cart.find((it) => it.id === dish.id)
+                        const maxSelected = isOnCart && isOnCart.cantidad === quantityLimit
+                        
                         return (
                             <div key={dish.id} id={showCat ? `#${dish.categoryName.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                 {
@@ -118,7 +108,15 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
                                     {
                                         (!isIncluded) ?
-                                            <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                            <>
+                                                {
+                                                    !maxSelected ?
+                                                    <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                                    :
+                                                    <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center"><PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} /></button>
+                                                }
+                                            
+                                            </>
                                             :
                                             <>
                                                 {
@@ -143,7 +141,6 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                 !isCartEmpty &&
                 <CartSummary theme={theme} cantidad={cartQuantity()} />
             }
-
 
             <DishDetail dish={dataDish} loadDish={isDishLoading} onDishErr={errorDish} isDishDetailOpened={isDishDetailOpened} setIsDishDetailOpened={setIsDishDetailOpened} handleAddToCart={addToCart} disableButton={disableButton} theme={theme} />
             <Sidebar dishes={dishes} isSidebarOpened={isSidebarOpened} setIsSidebarOpened={setIsSidebarOpened} theme={theme} />

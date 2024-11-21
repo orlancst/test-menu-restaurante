@@ -47,7 +47,6 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
         }
     }
 
-
     const handleChange = (id: number, value: string) => {
         setAns((prev) => {
             const existingAns = prev.find((ans) => ans.questionId === id)
@@ -62,8 +61,6 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
 
     const sendSurvey = async (e: React.SyntheticEvent) => {
         e.preventDefault()
-
-        console.log(orderId, ans);
 
         setLoader(true)
         setLoaderMsj('Enviando encuesta')
@@ -82,8 +79,6 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
             })
 
             if (!response.ok) {
-                console.log(response);
-
                 throw new Error('Hubo un problema con la petición al server.')
             }
 
@@ -96,7 +91,6 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
             showModalError(`Error: ${error}`)
 
         } finally {
-
             setLoader(false)
         }
 

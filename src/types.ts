@@ -1,36 +1,7 @@
-export interface Establishment {
-    id: number;
-    fuullname: string;
-    branch: string;
-    hq: string;
-    code: string;
-}
-
-export interface Plato {
-    id: number;
-    plato: string;
-    categoria: string;
-    descripcion: string;
-    precio: number;
-}
-
-export interface Platos {
-    products: Plato[];
-}
-
-// export interface SidebarProps extends Platos {
-//     isSidebarOpened: boolean;
-//     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
-// }
 
 export interface NavbarProps {
     toggleSidebar: () => void;
     theme: string;
-}
-
-export interface UserCart extends Plato {
-    cantidad: number;
-    comentario: string;
 }
 
 // type Dish = {
@@ -63,9 +34,4 @@ export interface SidebarProps extends Dishes {
     isSidebarOpened: boolean;
     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
     theme: string;
-}
-
-export interface OrderCheckCredentials {
-    roomNumber: string;
-    roomCode: string;
 }

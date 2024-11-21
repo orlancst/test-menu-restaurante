@@ -8,9 +8,7 @@ interface ForbidenAccessProps {
 const ForbidenAccess: React.FC<ForbidenAccessProps> = ({ theme }) => {
 
     const navigate = useNavigate()
-
     const { search } = useLocation()
-
 
     return (
         <div className="flex flex-col justify-center mx-8 h-lvh">

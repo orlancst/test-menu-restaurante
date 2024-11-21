@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Dish } from "../types";
 
-
 interface DishData {
     dataDish: Dish | null;
     errorDish: string | null;
     isDishLoading: boolean;
 }
-
 
 export const findDish = () => {
 
@@ -16,7 +14,6 @@ export const findDish = () => {
         errorDish: null,
         isDishLoading: false,
     })
-
 
     const fetchDishData = async (idDish: number, endpointUrl: string) => {
         setDishState({...dishState, isDishLoading: true})

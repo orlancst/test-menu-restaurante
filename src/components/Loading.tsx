@@ -32,7 +32,6 @@ const Loading: React.FC<LoadingComponent> = ({ theme }) => {
     //     )
     // }
 
-
     return (
         <div className="flex flex-col justify-center mx-8 h-lvh">
             <div className="relative w-full grid place-items-center">

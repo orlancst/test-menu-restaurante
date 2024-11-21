@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-
 interface QueryData {
     data: any;
     loading: boolean;

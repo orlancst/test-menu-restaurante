@@ -1,7 +1,6 @@
 
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Testing from './components/Testing';
 import MenuContainer from './components/MenuContainer';
 import Cart from './components/Cart';
 import Verify from './components/Verify';
@@ -10,7 +9,6 @@ import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
 import establishments from "./data/establishments.json"
-import Loading from './components/Loading';
 
 function App() {
   const queryParams = new URLSearchParams(window.location.search)
@@ -46,14 +44,12 @@ function App() {
           <BrowserRouter>
 
             <Routes>
-              {/* <Route path='/' element={<Testing />} /> */}
               <Route path='/' element={<MenuContainer theme={theme} hq={hq} />} />
               {/* <Route path='/' element={<UnavailableAccess />} /> */}
               <Route path='/cart' element={<Cart theme={theme} />} />
               <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
               <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} setAccessKey={setAccessKey} />} />
               <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} setAccessKey={setAccessKey} />} />
-              <Route path='/theme' element={<Loading theme={theme} />} />
             </Routes>
           </BrowserRouter>
 
