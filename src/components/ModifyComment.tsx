@@ -87,7 +87,7 @@ const ModifyComment: React.FC<ModifyCommentProps> = ({ idProd, cart, isModifyCom
 
                 <form action="" className='flex flex-col'>
                     <label htmlFor="edit-comment" className='text-sm text-secondary mb-1'>Comentarios</label>
-                    <textarea name="edit-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black text-xs p-2 focus:outline-none' onChange={handleChangeComment}></textarea>
+                    <textarea name="edit-comment" cols={3} maxLength={250} className='rounded-md resize-none text-black bg-white text-xs p-2 focus:outline-none' onChange={handleChangeComment}></textarea>
                     <span className='font-light text-secondary text-xs mt-1'>Deja el campo en blanco para eliminar el comentario</span>
                 </form>
                 <div className="flex flex-row justify-center gap-x-5 mt-6">

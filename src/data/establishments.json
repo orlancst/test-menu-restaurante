@@ -7,7 +7,7 @@
 },
 {
     "id": 2,
-    "fullname": "Motel CarpeDiem Chiquinquirá",
+    "fullname": "Motel Carpe Diem Chiquinquirá",
     "branch": "carpediem",
     "hq": "Chiquinquirá",
     "code": "451ad7cc654c77a73d43a4cd5b94d2c6"
@@ -21,14 +21,14 @@
 },
 {
     "id": 4,
-    "fullname": "Motel CarpeDiem Circunvalar",
+    "fullname": "Motel Carpe Diem Circunvalar",
     "branch": "carpediem",
     "hq": "Circunvalar",
     "code": "1c4839f03c1d8b68291d368b0d289840"
 },
 {
     "id": 5,
-    "fullname": "Motel CarpeDiem Barrio Abajo",
+    "fullname": "Motel Carpe Diem Barrio Abajo",
     "branch": "carpediem",
     "hq": "Barrio Abajo",
     "code": "6b727e2a496a99883b7458c1b4e0332a"

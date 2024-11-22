@@ -23,7 +23,6 @@ const OrderConfirmed: React.FC<OrderConfirmedProps> = ({ theme, setAccessKey }) 
         return <ForbidenAccess theme={theme} />
     }
     
-    
     useEffect(() => {
 
         setAccessKey('')

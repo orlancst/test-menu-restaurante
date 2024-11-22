@@ -54,12 +54,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
         setLoader(true)
         setLoaderMsj('Realizando pedido')
 
-        console.dir({
-            "addedItems": adaptCartReq(cart),
-            "totalAmount": cartTotalPrice()
-        });
-
-
         try {
 
             const response = await fetch(`${$API_KEY}orders`, {

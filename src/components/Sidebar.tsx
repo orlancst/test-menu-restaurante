@@ -25,7 +25,8 @@ const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebar
 
         if (section) {
             closeSidebar()
-            section.scrollIntoView({ behavior:'smooth' })
+            //section.scrollIntoView({ behavior:'smooth' })
+            window.scrollTo({behavior:'smooth', top: section.getBoundingClientRect().top - document.body.getBoundingClientRect().top - 75})
         }
         
     }

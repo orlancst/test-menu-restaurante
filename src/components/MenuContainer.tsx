@@ -12,6 +12,7 @@ import { validateAccess } from "../hooks/validateAccess"
 import { findDish } from "../hooks/findDish"
 import UnavailableAccess from "./UnavailableAccess"
 import PlusIcon from '../assets/svg/PlusIcon'
+import MinusIcon from '../assets/svg/MinusIcon'
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -103,7 +104,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                 </div>
 
 
-                                <div className="flex flex-row justify-between mb-3">
+                                <div className="relative flex flex-row justify-between mb-3">
                                     <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-ES')}</span>
 
                                     {
@@ -128,6 +129,16 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
                                             </>
                                     }
+
+                                    {/* <div className="absolute right-0 z-40 bg-neutral border-2 rounded-badge shadow-lg px-3 py-1 flex gap-x-2 align-middle">
+                                        <button>
+                                            <MinusIcon fillColor='#ffffff' />
+                                        </button>
+                                        <span className="mx-5 font-bold text-secondary">1</span>
+                                        <button>
+                                            <PlusIcon fillColor='#ffffff' />
+                                        </button>
+                                    </div> */}
 
                                 </div>
                                 <hr className="h-0 border-t-1 mb-4" />

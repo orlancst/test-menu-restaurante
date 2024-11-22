@@ -20,7 +20,14 @@ export default {
   ],
   daisyui: {
     themes: [
-      "light",
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          accent: "black",
+          secondary: "white",
+        },
+
+      },
       {
         byhours: {
           "primary": "#ff5800",

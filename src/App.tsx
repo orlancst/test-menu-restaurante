@@ -20,18 +20,21 @@ function App() {
   // neutral: morado claro
   const [theme, setTheme] = useState<string>('')
   const [hq, setHq] = useState<string>('')
-
   const [accessKey, setAccessKey] = useState<string>('')
-  
+
   useEffect(() => {
     const branchCode = queryParams.get('branch')
-
-    const objEstablishment = establishments.find((item) => item.code === branchCode) 
+    const objEstablishment = establishments.find((item) => item.code === branchCode)
 
     if (objEstablishment) {
       setTheme(objEstablishment.branch)
       setHq(objEstablishment.hq)
       document.documentElement.setAttribute('data-theme', objEstablishment.branch);
+      document.title = `Menú Restaurante | ${objEstablishment.fullname}`
+      const link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']")
+      if (link) {
+        link.href = `/${objEstablishment.branch}.svg`
+      }
     }
 
   }, [queryParams])
@@ -39,23 +42,18 @@ function App() {
   return (
     <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'} select-none`}>
 
-
-        <CartProvider>
-          <BrowserRouter>
-
-            <Routes>
-              <Route path='/' element={<MenuContainer theme={theme} hq={hq} />} />
-              {/* <Route path='/' element={<UnavailableAccess />} /> */}
-              <Route path='/cart' element={<Cart theme={theme} />} />
-              <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
-              <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} setAccessKey={setAccessKey} />} />
-              <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} setAccessKey={setAccessKey} />} />
-            </Routes>
-          </BrowserRouter>
-
-        </CartProvider>
-
-
+      <CartProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<MenuContainer theme={theme} hq={hq} />} />
+            {/* <Route path='/' element={<UnavailableAccess />} /> */}
+            <Route path='/cart' element={<Cart theme={theme} />} />
+            <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
+            <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} setAccessKey={setAccessKey} />} />
+            <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} setAccessKey={setAccessKey} />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
 
     </div>
   )

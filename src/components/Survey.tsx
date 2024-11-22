@@ -20,10 +20,6 @@ interface Question {
     required: boolean;
 }
 
-interface sendSurvey {
-    responses: Array<Answers>
-}
-
 type Answers = {
     questionId: number;
     answer: string;
@@ -107,7 +103,7 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
     return (
         <>
             <h1 className="uppercase font-bold text-xl text-primary text-center">Pedido confirmado</h1>
-            <p className="text-center text-secondary text-xs mt-3">Su pedido ha sido confirmado con éxito y tiene un tiempo estimado de 20 minutos.</p>
+            <p className="text-center text-secondary text-xs mt-3">Su pedido ha sido confirmado exitosamente y estará listo en aproximadamente 20 minutos.</p>
             <div className="flex justify-center my-6">
                 <CheckIcon primaryColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} secondaryColor={theme === 'carpediem' ? '#ac004f' : '#c24300'} />
             </div>
@@ -144,7 +140,7 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
                                                     }
                                                 </div>
                                                 :
-                                                <textarea name="dish-comment" cols={3} maxLength={100} className='w-full rounded-md resize-none text-black text-xs p-2 focus:outline-none' placeholder="Responde brevemente..." onChange={(e) => handleChange(question.id, e.target.value)} required={question.required}></textarea>
+                                                <textarea name="dish-comment" cols={3} maxLength={100} className='w-full rounded-md resize-none text-black bg-white text-xs p-2 focus:outline-none' placeholder="Responde brevemente..." onChange={(e) => handleChange(question.id, e.target.value)} required={question.required}></textarea>
                                         }
                                     </div>
 

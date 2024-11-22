@@ -77,13 +77,13 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
                 })
             })
 
+            // const json = await response.json()
+
             if (!response.ok) {
                 console.log(response);
 
-                if (response.status === 401) {
-                    throw new Error('Pedido no autorizado.')
 
-                } else if (response.status === 403) {
+                if (response.status >= 400 && response.status < 500) {
                     throw new Error('El código ingresado no es el correcto.')
 
                 } else {
