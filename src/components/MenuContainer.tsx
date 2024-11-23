@@ -4,7 +4,8 @@ import Header from "./Header"
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
 import Loading from "./Loading"
-import { useContext, useEffect, useState } from "react"
+import QuantityCounter from "./QuantityCounter"
+import { useContext, useEffect, useRef, useState } from "react"
 import { shortenParagraph } from "../helpers/utils"
 import { Dish } from "../types";
 import { CartContext } from "../context/CartContext"
@@ -12,7 +13,6 @@ import { validateAccess } from "../hooks/validateAccess"
 import { findDish } from "../hooks/findDish"
 import UnavailableAccess from "./UnavailableAccess"
 import PlusIcon from '../assets/svg/PlusIcon'
-import MinusIcon from '../assets/svg/MinusIcon'
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -32,10 +32,29 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     const { dataDish, errorDish, isDishLoading, fetchDishData } = findDish()
     const [disableButton, setDisableButton] = useState<boolean>(false)
 
+    const [isQuantityCounterVisible, setIsQuantityCounterVisible] = useState<number | null>(null);
+    const quantityCounterVisibleRef = useRef<HTMLDivElement | null>(null)
+
+
     useEffect(() => {
 
         if (localStorage.getItem('orderId')) {
             localStorage.removeItem('orderId')
+        }
+
+    }, [])
+
+    const handleClickFuera = (event: MouseEvent) => {
+        if (quantityCounterVisibleRef.current && !quantityCounterVisibleRef.current.contains(event.target as Node)) {
+            setIsQuantityCounterVisible(null)
+        }
+     }
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickFuera)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickFuera)
         }
 
     }, [])
@@ -47,7 +66,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             if (data.length > 0) {
 
                 setDishes(data)
-
+                
             }
 
         }
@@ -60,6 +79,13 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         setIsDishDetailOpened(true);
         //setDish(findDishData)
         fetchDishData(id, $API_KEY)
+
+    }
+
+    const handleAddButton = (dish: Dish, cant: number, comment: string, addMore: boolean) => {
+
+        setIsQuantityCounterVisible((prev) => (prev === dish.id ? null : dish.id))
+        addToCart(dish, cant, comment, addMore)
 
     }
 
@@ -85,7 +111,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
                 {
                     dishes?.map((dish, index) => {
-                        const showCat = index === 0 || dish.category.name !== dishes[index - 1].category.name ? true : false;
+                        const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
                         const isIncluded = dish.categoryId === 7 ? true : false;
 
                         //validar si el producto seleccionado alcanzó el tope permitido para agregar al carrito
@@ -93,10 +119,10 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                         const maxSelected = isOnCart && isOnCart.cantidad === quantityLimit
                         
                         return (
-                            <div key={dish.id} id={showCat ? `#${dish.category.name.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
+                            <div key={dish.id} id={showCat ? `#${dish.categoryName.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                 {
                                     showCat &&
-                                    <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.category.name}</h3>
+                                    <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.categoryName}</h3>
                                 }
 
                                 <div onClick={() => { handleOpenDishDetail(dish.id) }}>
@@ -114,7 +140,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                             <>
                                                 {
                                                     !maxSelected ?
-                                                    <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                                    <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
                                                     :
                                                     <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center"><PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} /></button>
                                                 }
@@ -132,15 +158,15 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                             </>
                                     }
 
-                                    {/* <div className="absolute right-0 z-40 bg-neutral border-2 rounded-badge shadow-lg px-3 py-1 flex gap-x-2 align-middle">
-                                        <button>
-                                            <MinusIcon fillColor='#ffffff' />
-                                        </button>
-                                        <span className="mx-5 font-bold text-secondary">1</span>
-                                        <button>
-                                            <PlusIcon fillColor='#ffffff' />
-                                        </button>
-                                    </div> */}
+                                    {
+                                        isQuantityCounterVisible === dish.id && (
+                                            <div ref={quantityCounterVisibleRef} className="absolute right-0 top-[-3px] z-40 bg-neutral border-2 rounded-badge shadow-lg px-3 py-1 flex gap-x-2 align-middle">
+                                                <QuantityCounter />
+
+                                            </div>
+
+                                        )
+                                    }
 
                                 </div>
                                 <hr className="h-0 border-t-1 mb-4" />

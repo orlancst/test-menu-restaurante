@@ -18,11 +18,7 @@ export interface Dish {
     price: number;
     description: string;
     categoryId: number;
-    category: {
-        id: number;
-        name: string;
-        sortOrder: number;
-    };
+    categoryName: string;
 }
 
 export interface Dishes {
@@ -38,4 +34,16 @@ export interface SidebarProps extends Dishes {
     isSidebarOpened: boolean;
     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;
     theme: string;
+}
+
+export interface Question {
+    id: number;
+    statement: string;
+    answerOptions: string[];
+    required: boolean;
+}
+
+export type Answers = {
+    questionId: number;
+    answer: string;
 }

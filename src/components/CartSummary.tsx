@@ -19,7 +19,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({theme, cantidad}) => {
   }
 
   return (
-    <div className="sticky bottom-0 z-10 bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior">
+    <div className="sticky bottom-0 z-[100] bg-neutral p-5 rounded-t-xl border-t-1 border-t-black shadow-superior">
         <div className="flex flex-row justify-center gap-x-5">
             <div className="flex flex-col">
                 <span className="text-sm text-secondary">{cantidad} producto{cantidad !== 1 ? 's' : ''}</span>

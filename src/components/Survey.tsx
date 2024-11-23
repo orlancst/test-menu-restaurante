@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CheckIcon from "../assets/svg/CheckIcon"
 import { getSurvey } from "../hooks/getSurvey"
 import { ModalAlert } from "./ModalAlert";
+import { Question, Answers } from "../types";
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -13,17 +14,7 @@ interface SurveyProps {
     setLoaderMsj: React.Dispatch<React.SetStateAction<string>>;
 }
 
-interface Question {
-    id: number;
-    statement: string;
-    answers: string[];
-    required: boolean;
-}
 
-type Answers = {
-    questionId: number;
-    answer: string;
-}
 
 const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoader, setLoaderMsj}) => {
 
@@ -128,11 +119,11 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
                                             }
                                         </label>
                                         {
-                                            (question.answers.length > 0) ?
+                                            (question.answerOptions.length > 0) ?
                                                 <div className="flex flex-col gap-y-2 mt-2 mb-5">
 
                                                     {
-                                                        question.answers.map((answer, ind) => {
+                                                        question.answerOptions.map((answer, ind) => {
                                                             return (
                                                                 <label key={ind} className="flex items-center"><input type="radio" name={`question-${index + 1}`} className="radio radio-xs radio-primary mr-2" value={answer} onChange={(e) => handleChange(question.id, e.target.value)} required={question.required} /> <span className="text-secondary text-xs font-light" >{answer}</span></label>
                                                             )
