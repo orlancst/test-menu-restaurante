@@ -5,7 +5,7 @@ import { NavbarProps } from "../types"
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar, theme }) => {
 
     return (
-        <div className="sticky top-0 w-full flex flex-row px-4 gap-x-0 py-3 bg-accent">
+        <div className="sticky top-0 w-full flex flex-row px-4 gap-x-0 py-3 bg-accent z-[100]">
             <div className="basis-1/3 border-t-2 border-b-2 flex items-center">
 
                 <button onClick={toggleSidebar}>

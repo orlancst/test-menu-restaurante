@@ -75,6 +75,8 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         return <UnavailableAccess theme={theme} />
     }
 
+
+
     return (
         <>
             <Header theme={theme} hq={hq} />
@@ -83,7 +85,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
                 {
                     dishes?.map((dish, index) => {
-                        const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
+                        const showCat = index === 0 || dish.category.name !== dishes[index - 1].category.name ? true : false;
                         const isIncluded = dish.categoryId === 7 ? true : false;
 
                         //validar si el producto seleccionado alcanzó el tope permitido para agregar al carrito
@@ -91,10 +93,10 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                         const maxSelected = isOnCart && isOnCart.cantidad === quantityLimit
                         
                         return (
-                            <div key={dish.id} id={showCat ? `#${dish.categoryName.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
+                            <div key={dish.id} id={showCat ? `#${dish.category.name.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                 {
                                     showCat &&
-                                    <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.categoryName}</h3>
+                                    <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.category.name}</h3>
                                 }
 
                                 <div onClick={() => { handleOpenDishDetail(dish.id) }}>

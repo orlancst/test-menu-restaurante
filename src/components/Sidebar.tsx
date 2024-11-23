@@ -12,9 +12,9 @@ const Sidebar: React.FC<SidebarProps> = ({ dishes, isSidebarOpened, setIsSidebar
     const styles = {
         backgroundColor: `${theme === 'carpediem' ? '#7a142a' : '#4f0b7b'}`,
     }
-    const categories = [...new Set(dishes.map(dish => dish.categoryName))]
+    const categories = [...new Set(dishes.map(dish => dish.category.name))]
     const categoryCount = categories.map(category => {
-        const count = dishes.filter(dish => dish.categoryName === category).length
+        const count = dishes.filter(dish => dish.category.name === category).length
 
         return { category, cant: count }
     })

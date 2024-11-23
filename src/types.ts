@@ -18,7 +18,11 @@ export interface Dish {
     price: number;
     description: string;
     categoryId: number;
-    categoryName: string;
+    category: {
+        id: number;
+        name: string;
+        sortOrder: number;
+    };
 }
 
 export interface Dishes {
