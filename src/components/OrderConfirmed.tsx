@@ -25,8 +25,8 @@ const OrderConfirmed: React.FC<OrderConfirmedProps> = ({ theme, setAccessKey }) 
     
     useEffect(() => {
 
-        setAccessKey('')
-        localStorage.removeItem('accessKey');
+        // setAccessKey('')
+        // localStorage.removeItem('accessKey');
         emptyCart()
 
     }, [])

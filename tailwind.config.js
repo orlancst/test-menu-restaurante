@@ -12,6 +12,15 @@ export default {
       },
       boxShadow: {
         "superior": '0 -4px 20px 0px rgba(0, 0, 0, 0.3)',
+      },
+      keyframes: {
+        jump: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
+        }
+      },
+      animation: {
+        brinco: "jump 0.25s ease-in-out",
       }
     },
   },

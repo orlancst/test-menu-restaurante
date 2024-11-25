@@ -9,7 +9,7 @@ interface MiContexto {
     quantityLimit: number;
     freeQuantityLimit: number;
     freeCartQuantity: () => number;
-    modifyDishQuantityOnCart: (dishId: number, add: boolean, isIncluded: boolean) => void;
+    modifyDishQuantityOnCart: (dishId: number, add: boolean, isIncluded: boolean) => boolean;
     emptyCart: () => void;
 }
 
@@ -25,7 +25,7 @@ export const CartContext = createContext<MiContexto>({
     quantityLimit: 5,
     freeQuantityLimit: 2,
     freeCartQuantity: () => 0,
-    modifyDishQuantityOnCart: () => { },
+    modifyDishQuantityOnCart: () => false,
     emptyCart: () => { },
 });
 
@@ -48,8 +48,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         if (alreadyAdded) {
 
-            //category ID = 7: Plan incluido
-            if (addMore && (alreadyAdded.categoryId !== 7 && alreadyAdded.cantidad < quantityLimit || alreadyAdded.categoryId === 7 && freeCartQuantity() < freeQuantityLimit)) {
+            //category ID = 1: Plan incluido
+            if (addMore && (alreadyAdded.categoryId !== 1 && alreadyAdded.cantidad < quantityLimit || alreadyAdded.categoryId === 1 && freeCartQuantity() < freeQuantityLimit)) {
                 
                 alreadyAdded.cantidad += cantidad;
             } else if (!addMore) {
@@ -59,7 +59,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             }
 
             alreadyAdded.comentario = comentario;
-        } else if (!alreadyAdded && (itemAdded.categoryId !== 7 || (itemAdded.categoryId === 7 && freeCartQuantity() < freeQuantityLimit))) {
+        } else if (!alreadyAdded && (itemAdded.categoryId !== 1 || (itemAdded.categoryId === 1 && freeCartQuantity() < freeQuantityLimit))) {
             
             newCart.push(itemAdded)
         }
@@ -78,6 +78,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     
                 if ((!isIncluded && auxCart.cantidad < quantityLimit) || (isIncluded && freeCartQuantity() < freeQuantityLimit)) {
                     auxCart.cantidad ++ ;
+                } else {
+                    return false;
                 }
     
             } else {
@@ -93,6 +95,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
         }
 
         setCart(uCart)
+        return true;
 
     }
 
@@ -102,7 +105,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     }
 
     const freeCartQuantity = ():number => {
-        const freeCart = cart.filter((c) => c.categoryId === 7)
+        const freeCart = cart.filter((c) => c.categoryId === 1)
         return freeCart.reduce((acc, prod) => acc + prod.cantidad, 0)
         
     }

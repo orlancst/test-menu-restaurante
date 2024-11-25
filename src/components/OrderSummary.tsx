@@ -6,6 +6,8 @@ import LoaderMask from "./LoaderMask";
 import { ModalAlert } from "./ModalAlert";
 import { adaptCartReq } from "../helpers/utils";
 import ForbidenAccess from "./ForbidenAccess";
+import { flushSync } from "react-dom";
+import { DeliveryPoint } from '../types';
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -13,9 +15,10 @@ interface OrderSummaryProps {
     theme: string;
     accessKey: string;
     setAccessKey: React.Dispatch<React.SetStateAction<string>>;
+    deliveryPoint: DeliveryPoint | null;
 }
 
-const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccessKey }) => {
+const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccessKey, deliveryPoint }) => {
 
     const { cart, cartTotalPrice } = useContext(CartContext);
     const navigate = useNavigate();
@@ -53,27 +56,28 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
 
         setLoader(true)
         setLoaderMsj('Realizando pedido')
-
+        
         try {
 
             const response = await fetch(`${$API_KEY}orders`, {
                 method: 'POST',
                 headers: {
-                    'authorization': accessKey,
+                    // 'authorization': accessKey,
                     'Content-Type': 'application/json',
 
                 },
                 body: JSON.stringify({
+                    "deliveryPoint": deliveryPoint,
                     "addedItems": adaptCartReq(cart),
                     "totalAmount": cartTotalPrice()
                 })
             })
+            const dataReceived = await response.json()
 
             if (!response.ok) {
-                throw new Error('Hubo un problema con la petición al server.')
+                throw new Error(dataReceived.message)
             }
 
-            const dataReceived = await response.json()
             localStorage.setItem('orderId', dataReceived.order.id)
 
             navigate('/order-confirmed');
@@ -82,7 +86,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
             //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
             //El código ingresado no coincide con el No° de la habitación.
             console.error('Error al realizar la solicitud: ', error);
-            showModalError(`Error: ${error}`)
+            showModalError(`${error}.`)
 
         } finally {
 
@@ -113,7 +117,20 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
             }
 
             <div className={`${theme === 'carpediem' ? 'bg-neutral' : 'bg-accent'} h-[90px] p-5 flex justify-between items-center`}>
-                <button onClick={() => { navigate(`/verify${search}`) }} className="flex items-center">
+                <button onClick={() => {
+                    
+                    //navigate(`/verify${search}`)
+
+                    //navigate(`/cart${search}`)
+
+                    document.startViewTransition(() => {
+                        flushSync(() => {
+                            navigate(`/cart${search}`);
+
+                        })
+                    })
+                    
+                    }} className="flex items-center">
                     <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#ffffff' : '#ff5800'} />
                     <span className="font-semibold text-xl ml-1">Atrás</span>
                 </button>

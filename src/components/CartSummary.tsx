@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import { flushSync } from "react-dom";
 
 interface CartSummaryProps {
   theme: string;
@@ -15,7 +16,15 @@ const CartSummary: React.FC<CartSummaryProps> = ({theme, cantidad}) => {
   const { search } = useLocation()
 
   const goToCart = () => {
-    navigate(`/cart${search}`);
+
+    // navigate(`/cart${search}`);
+
+    document.startViewTransition(() => {
+      flushSync(() => {
+        navigate(`/cart${search}`);
+
+      })
+    })
   }
 
   return (

@@ -32,9 +32,9 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     const { dataDish, errorDish, isDishLoading, fetchDishData } = findDish()
     const [disableButton, setDisableButton] = useState<boolean>(false)
 
-    const [isQuantityCounterVisible, setIsQuantityCounterVisible] = useState<number | null>(null);
     const quantityCounterVisibleRef = useRef<HTMLDivElement | null>(null)
-
+    const [isQuantityCounterVisible, setIsQuantityCounterVisible] = useState<number | null>(null);
+    const [isQCVShown, setIsQCVShown] = useState<number | null>(null);
 
     useEffect(() => {
 
@@ -44,15 +44,20 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
     }, [])
 
-    const handleClickFuera = (event: MouseEvent) => {
-        if (quantityCounterVisibleRef.current && !quantityCounterVisibleRef.current.contains(event.target as Node)) {
-            setIsQuantityCounterVisible(null)
-        }
-     }
+
 
     useEffect(() => {
-        document.addEventListener("mousedown", handleClickFuera)
 
+        const handleClickFuera = (event: MouseEvent) => {
+            if (quantityCounterVisibleRef.current && !quantityCounterVisibleRef.current.contains(event.target as Node)) {
+
+                setIsQCVShown(null)
+                setTimeout(() => setIsQuantityCounterVisible(null), 300);
+
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickFuera)
         return () => {
             document.removeEventListener("mousedown", handleClickFuera)
         }
@@ -66,7 +71,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             if (data.length > 0) {
 
                 setDishes(data)
-                
+
             }
 
         }
@@ -82,10 +87,30 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
     }
 
-    const handleAddButton = (dish: Dish, cant: number, comment: string, addMore: boolean) => {
+    const handleAddButton = (dish: Dish, cant: number, comment: string, addMore: boolean, execAddToCart: boolean, cantOnCart: number | undefined) => {
 
-        setIsQuantityCounterVisible((prev) => (prev === dish.id ? null : dish.id))
-        addToCart(dish, cant, comment, addMore)
+        if (isQuantityCounterVisible === dish.id) {
+            setIsQCVShown(null)
+            setTimeout(() => setIsQuantityCounterVisible(null), 300);
+
+        } else {
+            setIsQuantityCounterVisible(dish.id)
+
+            setTimeout(() => {
+                setIsQCVShown(dish.id)
+
+                if (execAddToCart && !cantOnCart) {
+                    addToCart(dish, cant, comment, addMore)
+                }
+            }, 10);
+        }
+
+        // setIsQuantityCounterVisible((prev) => (prev === dish.id ? null : dish.id))
+
+        // if (execAddToCart && !cantOnCart) {
+        //     addToCart(dish, cant, comment, addMore)
+
+        // }
 
     }
 
@@ -112,12 +137,12 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                 {
                     dishes?.map((dish, index) => {
                         const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
-                        const isIncluded = dish.categoryId === 7 ? true : false;
+                        const isIncluded = dish.categoryId === 1 ? true : false;
 
                         //validar si el producto seleccionado alcanzó el tope permitido para agregar al carrito
                         const isOnCart = cart.find((it) => it.id === dish.id)
                         const maxSelected = isOnCart && isOnCart.cantidad === quantityLimit
-                        
+
                         return (
                             <div key={dish.id} id={showCat ? `#${dish.categoryName.replace(/ /g, "_").toLocaleLowerCase()}` : undefined}>
                                 {
@@ -140,19 +165,55 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                             <>
                                                 {
                                                     !maxSelected ?
-                                                    <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
-                                                    :
-                                                    <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center"><PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} /></button>
+                                                        <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true, true, isOnCart?.cantidad) }}>
+                                                            {
+                                                                isOnCart?.cantidad ?
+                                                                    <span className="font-semibold text-sm text-secondary">
+                                                                        {isOnCart?.cantidad}
+                                                                    </span>
+                                                                    :
+                                                                    <PlusIcon fillColor='white' />
+                                                            }
+                                                        </button>
+                                                        :
+                                                        <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true, false, isOnCart?.cantidad) }}>
+                                                            {
+                                                                isOnCart?.cantidad ?
+                                                                    <span className="font-semibold text-sm text-primary">
+                                                                        {isOnCart?.cantidad}
+                                                                    </span>
+                                                                    :
+                                                                    <PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                            }
+                                                        </button>
                                                 }
-                                            
+
                                             </>
                                             :
                                             <>
                                                 {
                                                     freeQuantityLimit !== freeCartQuantity() ?
-                                                        <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { addToCart(dish, 1, "", true) }}><PlusIcon fillColor='white' /></button>
+                                                        <button className="w-7 bg-primary rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true, true, isOnCart?.cantidad) }}>
+                                                            {
+                                                                isOnCart?.cantidad ?
+                                                                    <span className="font-semibold text-sm text-secondary">
+                                                                        {isOnCart?.cantidad}
+                                                                    </span>
+                                                                    :
+                                                                    <PlusIcon fillColor='white' />
+                                                            }
+                                                        </button>
                                                         :
-                                                        <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center"><PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} /></button>
+                                                        <button className="w-7 bg-transparent rounded text-xl border border-primary flex justify-center items-center" onClick={() => { handleAddButton(dish, 1, "", true, false, isOnCart?.cantidad) }}>
+                                                            {
+                                                                isOnCart?.cantidad ?
+                                                                    <span className="font-semibold text-sm text-primary">
+                                                                        {isOnCart?.cantidad}
+                                                                    </span>
+                                                                    :
+                                                                    <PlusIcon fillColor={theme === 'carpediem' ? '#df0067' : '#ff5800'} />
+                                                            }
+                                                        </button>
                                                 }
 
                                             </>
@@ -160,8 +221,8 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
                                     {
                                         isQuantityCounterVisible === dish.id && (
-                                            <div ref={quantityCounterVisibleRef} className="absolute right-0 top-[-3px] z-40 bg-neutral border-2 rounded-badge shadow-lg px-3 py-1 flex gap-x-2 align-middle">
-                                                <QuantityCounter />
+                                            <div ref={quantityCounterVisibleRef} className={`absolute right-0 top-[-3px] z-40 bg-neutral border-2 rounded-badge shadow-lg px-3 py-1 flex gap-x-2 align-middle transition-all duration-300 ${isQCVShown === dish.id ? "opacity-100 scale-100" : "opacity-0 scale-50"}`}>
+                                                <QuantityCounter key={dish.id} dishId={dish.id} dishCantOnCart={isOnCart?.cantidad} isIncluded={isIncluded} setIsQuantityCounterVisible={setIsQuantityCounterVisible} setIsQCVShown={setIsQCVShown} />
 
                                             </div>
 

@@ -7,6 +7,7 @@ import EditCommentIcon from '../assets/svg/EditCommentIcon'
 import { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import ModifyComment from './ModifyComment';
+import { flushSync } from 'react-dom'
 
 interface CartProps {
     theme: string;
@@ -25,7 +26,14 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
 
     //Tenerlo en un futuro...
     const goToVerify = () => {
-        navigate(`/verify${search}`);
+        // navigate(`/verify${search}`);
+
+        document.startViewTransition(() => {
+            flushSync(() => {
+                navigate(`/order-summary${search}`);
+
+            })
+        })
     }
 
     const handleOpenModifyComment = (id: number) => () => {
@@ -49,7 +57,7 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                 <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col justify-between`}>
 
                     <div className='p-5 pb-0 flex flex-col'>
-        
+
 
                         {
                             cart.length === 0 &&

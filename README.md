@@ -1,50 +1,101 @@
-# React + TypeScript + Vite
+# Web Menu Restaurant for ByHours - Carpe Diem Establishments
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project aims to digitalize room service for ByHours hotels and Carpe Diem motels by providing an interactive web interface for customers to order meals and beverages directly from their rooms. The application improves operational efficiency and enhances the customer experience by eliminating manual steps and reducing potential errors.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Future Improvements](#future-improvements)
+- [License](#license)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+1. **Interactive Menu**
+   - Browse categorized menu items with descriptions, pricing, and customization options.
+   - Seamless navigation to select items and view order summaries.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+2. **Room-Specific QR Code Access**
+   - Scan a unique QR code to access the menu, linked to the room number automatically or manually.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. **Real-Time Order Processing**
+   - Orders are sent directly to the kitchen, reducing the need for intermediary staff.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+4. **Order Tracking**
+   - View the current status of orders in real time (e.g., "Preparing," "On the Way").
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+5. **Admin Panel (Future Development)**
+   - Modify menu prices and options dynamically.
+   - Access detailed sales statistics for informed decision-making.
+
+6. **Feedback Collection**
+   - Customers can provide quick feedback on the ordering experience.
+
+---
+
+## Technologies Used
+
+- **Frontend Framework:** React with TypeScript
+- **Build Tool:** Vite
+- **Styling:** TailwindCSS
+- **Integration:** Designed for connection with the Horus Hotel management system
+- **Cross-Platform Support:** Mobile-friendly interface accessible via web browsers (Android and iOS).
+
+---
+
+## Requirements
+
+- Node.js v16 or higher
+- A modern web browser (Google Chrome, Safari, etc.)
+- QR code generator or scanner (for testing room-specific access)
+
+---
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/orlancst/mvp_menu_restaurante_front.git
+   cd restaurant-web-menu
+   npm run dev
+    ```
+
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3. Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## Usage
+
+- Scan the room-specific QR code to access the web menu.
+- Browse the menu and select desired items.
+- Confirm the order.
+- Optional: Submit the satisfaction survey.
+
+---
+
+## Future Improvements
+- Add high-quality images for each menu item.
+- Extend tracking functionality to display detailed order stages.
+- Develop a comprehensive admin panel for real-time menu management and analytics.
+- Scale the system for broader use across multiple establishments.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+---

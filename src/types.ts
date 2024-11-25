@@ -47,3 +47,8 @@ export type Answers = {
     questionId: number;
     answer: string;
 }
+
+export interface DeliveryPoint {
+    establishmentId: number;
+    roomNumber: string | null;
+  }

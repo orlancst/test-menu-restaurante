@@ -6,6 +6,7 @@ import LoaderMask from "./LoaderMask"
 import { ModalAlert } from "./ModalAlert"
 import { CartContext } from "../context/CartContext"
 import ForbidenAccess from "./ForbidenAccess"
+import { flushSync } from "react-dom"
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -32,7 +33,7 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
         if (localStorage.getItem('accessKey') !== '') {
             localStorage.removeItem('accessKey')
         }
-    })
+    }, [])
 
     const navigate = useNavigate();
     const { search } = useLocation()
@@ -80,8 +81,6 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
             // const json = await response.json()
 
             if (!response.ok) {
-                console.log(response);
-
 
                 if (response.status >= 400 && response.status < 500) {
                     throw new Error('El código ingresado no es el correcto.')
@@ -96,7 +95,14 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
             const dataReceived = await response.json()
 
             setAccessKey(dataReceived.accessKey)
-            navigate(`/order-summary${search}`);
+            //navigate(`/order-summary${search}`);
+
+            document.startViewTransition(() => {
+                flushSync(() => {
+                    navigate(`/order-summary${search}`);
+
+                })
+            })
 
         } catch (error) {
             //Validar los tipos de errores que se pueden presentar al momento de enviar los campos
@@ -125,7 +131,17 @@ const Verify: React.FC<VerifyProps> = ({ theme, setAccessKey }) => {
             }
 
             <div className={`${theme === 'carpediem' ? 'bg-neutral' : 'bg-accent'} h-[90px] p-5 flex justify-between items-center`}>
-                <button onClick={() => { navigate(`/cart${search}`) }} className="flex items-center">
+                <button onClick={() => {
+                    //navigate(`/cart${search}`)
+
+                    document.startViewTransition(() => {
+                        flushSync(() => {
+                            navigate(`/cart${search}`);
+
+                        })
+                    })
+
+                }} className="flex items-center">
                     <LeftArrowIcon strokeColor={theme === 'carpediem' ? '#ffffff' : '#ff5800'} />
                     <span className="font-semibold text-xl ml-1">Atrás</span>
                 </button>
