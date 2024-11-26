@@ -28,7 +28,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
     const [dishes, setDishes] = useState<Dish[]>([]);
     const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
     const [isSidebarOpened, setIsSidebarOpened] = useState(false);
-    const { data, loading, error } = validateAccess('branch', 'room', $API_KEY)
+    const { data, loading, error } = validateAccess('branch', 'room', "theme", $API_KEY)
     const { dataDish, errorDish, isDishLoading, fetchDishData } = findDish()
     const [disableButton, setDisableButton] = useState<boolean>(false)
 
@@ -150,7 +150,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                                     <h3 className="text-2xl uppercase font-bold mb-1 text-primary">{dish.categoryName}</h3>
                                 }
 
-                                <div onClick={() => { handleOpenDishDetail(dish.id) }}>
+                                <div className="__titulo_desc" onClick={() => { handleOpenDishDetail(dish.id) }}>
 
                                     <h4 className="text-lg font-semibold text-secondary" >{dish.name}</h4>
                                     <p className="text-secondary text-xs">{shortenParagraph(dish.description, 75)} <span className="text-primary font-semibold ml-1">Ver más</span></p>

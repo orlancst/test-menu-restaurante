@@ -9,6 +9,7 @@ import OrderConfirmed from './components/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { useEffect, useState } from 'react';
 import establishments from "./data/establishments.json"
+import establishments2 from "./data/establishments2.json"
 import { DeliveryPoint } from './types';
 
 
@@ -29,26 +30,57 @@ function App() {
   useEffect(() => {
     const branchCode = queryParams.get('branch')
     const roomNumber = queryParams.get('room')
-    const objEstablishment = establishments.find((item) => item.code === branchCode)
+    const theme:unknown = queryParams.get('theme')
+    const objEstablishment = establishments2.find((item) => item.hash === branchCode)
+
+    let branch = 'byhours';
 
     if (objEstablishment) {
-      setTheme(objEstablishment.branch)
-      setHq(objEstablishment.hq)
+      if (theme && (theme as string === '1' || theme as string === '2')) {
+        branch = objEstablishment.line[theme as number].toLowerCase().replace(" ", "")
+        setTheme(branch)
+
+      }
+      setHq(objEstablishment.name)
 
       setDeliveryPoint({
         establishmentId: objEstablishment.id,
         roomNumber,
       })
 
-      document.documentElement.setAttribute('data-theme', objEstablishment.branch);
-      document.title = `Menú Restaurante | ${objEstablishment.fullname}`
+      document.documentElement.setAttribute('data-theme', branch);
+      document.title = `Menú Restaurante | ${theme as string === '2' ? 'Motel' : 'Hotel'} ${objEstablishment.line[theme as number]} ${objEstablishment.name}`
       const link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']")
       if (link) {
-        link.href = `/${objEstablishment.branch}.svg`
+        link.href = `/${branch}.svg`
       }
     }
 
-  }, [establishments, queryParams.get('branch'), queryParams.get('room')])
+  }, [establishments, queryParams.get('branch'), queryParams.get('room'), queryParams.get('theme')])
+
+  // useEffect(() => {
+  //   const branchCode = queryParams.get('branch')
+  //   const roomNumber = queryParams.get('room')
+  //   const objEstablishment = establishments.find((item) => item.code === branchCode)
+
+  //   if (objEstablishment) {
+  //     setTheme(objEstablishment.branch)
+  //     setHq(objEstablishment.hq)
+
+  //     setDeliveryPoint({
+  //       establishmentId: objEstablishment.id,
+  //       roomNumber,
+  //     })
+
+  //     document.documentElement.setAttribute('data-theme', objEstablishment.branch);
+  //     document.title = `Menú Restaurante | ${objEstablishment.fullname}`
+  //     const link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']")
+  //     if (link) {
+  //       link.href = `/${objEstablishment.branch}.svg`
+  //     }
+  //   }
+
+  // }, [establishments, queryParams.get('branch'), queryParams.get('room')])
 
   return (
     <div className={`bg-accent ${theme === 'carpediem' ? 'font-gillSans' : 'font-montserrat'} select-none`}>

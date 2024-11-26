@@ -1,0 +1,47 @@
+[
+    {
+        "id": 7,
+        "name": "Chiquinquirá",
+        "line": ["", "ByHours", "Carpe Diem"],
+        "address": "Cl. 44 #35-44, Sur Orient, Barranquilla, Atlántico, Colombia",
+        "phone": "+57 310 3662228",
+        "city": "Barranquilla",
+        "hash": "a617b75cd92a224245f9b7fd25370c57"
+    },
+    {
+        "id": 8,
+        "name": "Barrio Abajo",
+        "line": ["", "", "Carpe Diem"],
+        "address": "Cl. 43 #5039, Nte. Centro Histórico, Barranquilla, Atlántico, Colombia",
+        "phone": "+57 605 3702480",
+        "city": "Barranquilla",
+        "hash": "c2b4bdd87c472b3873c258630d639e4b"
+    },
+    {
+        "id": 9,
+        "name": "Astor",
+        "line": ["", "ByHours", ""],
+        "address": "55-129 Carrera 53, Barranquilla 080002",
+        "phone": "+57 300 3589279",
+        "city": "Barranquilla",
+        "hash": "fabaf77a81404696914eaa53a05fa231"
+    },
+    {
+        "id": 29,
+        "name": "Circunvalar",
+        "line": ["", "ByHours", "Carpe Diem"],
+        "address": "Parque internacional del caribe PIC, Cl. 110 #6-335, Suroccidente, Barranquilla, Atlántico, Colombia",
+        "phone": "+57 310 2842072",
+        "city": "Barranquilla",
+        "hash": "a0c60369b18bf31ea8314e238348d1ec"
+    },
+    {
+        "id": 31,
+        "name": "Las Américas",
+        "line": ["", "ByHours", ""],
+        "address": "70b30 Calle 6a, Bogotá 110831",
+        "phone": "+57 601 6080502",
+        "city": "Bogotá",
+        "hash": "551343c73be5355943d13f9eb64e0fda"
+    }
+]

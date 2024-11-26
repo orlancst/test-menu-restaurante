@@ -13,7 +13,7 @@ interface ErrorResponse {
     
 }
 
-export const validateAccess = (branch: string, room: string, endpointUrl: string): QueryData => {
+export const validateAccess = (branch: string, room: string, theme: string, endpointUrl: string): QueryData => {
 
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -25,10 +25,10 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
         return searchParams.get(param)
     }
 
-    const apiCall = async (branchParam: string, roomParam: string, endpointUrl: string) => {
+    const apiCall = async (branchParam: string, roomParam: string, themeParam: string, endpointUrl: string) => {
         let list = [];
         try {
-            const response = await fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}`)
+            const response = await fetch(`${endpointUrl}restaurants/menu?branch=${branchParam}&room=${roomParam}&theme=${themeParam}`)
             if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`)
             const result = await response.json()
             list = result
@@ -44,17 +44,18 @@ export const validateAccess = (branch: string, room: string, endpointUrl: string
     useEffect(() => {
         const branchParam = getParam(branch)
         const roomParam = getParam(room)
+        const themeParam = getParam(theme)
 
-        if (branchParam && roomParam) {
+        if (branchParam && roomParam && themeParam) {
 
-            apiCall(branchParam, roomParam, endpointUrl)
+            apiCall(branchParam, roomParam, themeParam, endpointUrl)
 
 
         } else {
             setError('Query params no encontrados')
             setLoading(false);
         }
-    }, [location.search, branch, room, endpointUrl])
+    }, [location.search, branch, room, theme, endpointUrl])
 
     return { data, loading, error }
 }

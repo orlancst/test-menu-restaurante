@@ -12,7 +12,7 @@ const UnavailableAccess: React.FC<UnavailableAccessProps> = ({ theme }) => {
             </div>
             
             <h1 className="uppercase font-bold text-xl text-primary text-center">Menú no disponible</h1>
-            <p className="text-center text-secondary text-xs mt-4">Por el momento, nuestro menú no está disponible. Vuelve a intentarlo más tarde.</p>
+            <p className="text-center text-secondary text-xs mt-4">Por el momento nuestro menú no está disponible. Vuelve a intentarlo más tarde.</p>
         </div>
     )
 }
