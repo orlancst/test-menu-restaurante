@@ -17,6 +17,7 @@ interface DrawerProps {
     theme: string;
 }
 
+const $INCLUDED_CAT_ID: number = import.meta.env.INCLUDED_CATEGORY_ID;
 
 const DishDetail: React.FC<DrawerProps> = (props) => {
 
@@ -28,7 +29,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     const { cart, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
 
-    const isDishIncluded: boolean = dish?.categoryId === 7 ? true : false;
+    const isDishIncluded: boolean = dish?.categoryId === $INCLUDED_CAT_ID ? true : false;
  
     const txtarea: HTMLTextAreaElement = document.querySelector('textarea[name="dish-comment"]')!
  
@@ -71,7 +72,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
 
     useEffect(() => {
         if (isDishDetailOpened) {
-            const dishOnCart = cart.find((item) => item.id === dish?.id);
+            const dishOnCart = cart.items.find((item) => item.id === dish?.id);
 
             if (dishOnCart) {
 

@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { Dish, CartUser } from "../types";
+import { Dish, CartUser, FullCart } from "../types";
+import { expireCart } from "../helpers/utils";
 
 interface MiContexto {
-    cart: CartUser[];
+    cart: FullCart;
     addToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
     cartQuantity: () => number;
     cartTotalPrice: () => number;
@@ -15,10 +16,10 @@ interface MiContexto {
 
 interface CartProviderProps {
     children: React.ReactNode;
-}
+} 
 
 export const CartContext = createContext<MiContexto>({
-    cart: [],
+    cart: {items: [], expirationDate: null},
     addToCart: () => { },
     cartQuantity: () => 0,
     cartTotalPrice: () => 0,
@@ -29,11 +30,13 @@ export const CartContext = createContext<MiContexto>({
     emptyCart: () => { },
 });
 
-const $cart: CartUser[] = JSON.parse(localStorage.getItem("cart") || '[]') as CartUser[]
+const $cart: FullCart = JSON.parse(localStorage.getItem("cart") || '{"items": [], "expirationDate": null}') as FullCart
+//const $cart: CartUser[] = JSON.parse(localStorage.getItem("cart") || '[]') as CartUser[]
+const $INCLUDED_CAT_ID: number = Number(import.meta.env.VITE_INCLUDED_CATEGORY_ID)
 
 export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
-    const [cart, setCart] = useState($cart)
+    const [cart, setCart] = useState<FullCart>($cart)
 
     //probablemente este valor puede aumentar o disminuir en un futuro
     const quantityLimit: number = 5
@@ -42,14 +45,14 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     const addToCart = (dish: Dish, cantidad: number, comentario: string, addMore: boolean) => {
 
         const itemAdded: CartUser = {...dish, cantidad, comentario}
-        const newCart = [...cart]
+        const newItems = [...cart.items]
 
-        const alreadyAdded = newCart.find((prod) => prod.id === itemAdded.id)
+        const alreadyAdded = newItems.find((prod) => prod.id === itemAdded.id)
 
         if (alreadyAdded) {
 
             //category ID = 1: Plan incluido
-            if (addMore && (alreadyAdded.categoryId !== 1 && alreadyAdded.cantidad < quantityLimit || alreadyAdded.categoryId === 1 && freeCartQuantity() < freeQuantityLimit)) {
+            if (addMore && (alreadyAdded.categoryId !== $INCLUDED_CAT_ID && alreadyAdded.cantidad < quantityLimit || alreadyAdded.categoryId === $INCLUDED_CAT_ID && freeCartQuantity() < freeQuantityLimit)) {
                 
                 alreadyAdded.cantidad += cantidad;
             } else if (!addMore) {
@@ -59,19 +62,23 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             }
 
             alreadyAdded.comentario = comentario;
-        } else if (!alreadyAdded && (itemAdded.categoryId !== 1 || (itemAdded.categoryId === 1 && freeCartQuantity() < freeQuantityLimit))) {
+        } else if (!alreadyAdded && (itemAdded.categoryId !== $INCLUDED_CAT_ID || (itemAdded.categoryId === $INCLUDED_CAT_ID && freeCartQuantity() < freeQuantityLimit))) {
             
-            newCart.push(itemAdded)
+            newItems.push(itemAdded)
         }
 
-        setCart(newCart)
+        setCart({
+            items: newItems,
+            expirationDate: cart.expirationDate || expireCart(1, 0, 0, 0),
+        })
         
     }
 
     const modifyDishQuantityOnCart = (dishId: number, add: boolean, isIncluded: boolean) => {
 
-        const uCart = [...cart]
+        const uCart = [...cart.items]
         const auxCart = uCart.find((prod) => prod.id === dishId)
+        let exp = cart.expirationDate
 
         if (auxCart) {
             if (add) {
@@ -90,32 +97,38 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
                     const index = uCart.indexOf(auxCart)
                     uCart.splice(index, 1)
                 }
+
+                exp = uCart.length > 0 ? cart.expirationDate : null;
+                
             }
 
         }
 
-        setCart(uCart)
+        setCart({
+            items: uCart,
+            expirationDate: exp,
+        })
         return true;
 
     }
 
     const emptyCart = () => {
-        setCart([])
+        setCart({ items: [], expirationDate: null });
         localStorage.removeItem("cart")
     }
 
     const freeCartQuantity = ():number => {
-        const freeCart = cart.filter((c) => c.categoryId === 1)
+        const freeCart = cart.items.filter((c) => c.categoryId === $INCLUDED_CAT_ID)
         return freeCart.reduce((acc, prod) => acc + prod.cantidad, 0)
         
     }
 
     const cartQuantity = () => {
-        return cart.reduce((acc, prod) => acc + prod.cantidad, 0)
+        return cart.items.reduce((acc, prod) => acc + prod.cantidad, 0)
     }
 
     const cartTotalPrice = () => {
-        return cart.reduce((acc, prod) => acc + prod.price * prod.cantidad, 0)
+        return cart.items.reduce((acc, prod) => acc + prod.price * prod.cantidad, 0)
     }
 
     useEffect(() => {

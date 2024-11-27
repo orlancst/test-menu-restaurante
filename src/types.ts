@@ -30,6 +30,11 @@ export interface CartUser extends Dish {
     comentario?: string;
 }
 
+export interface FullCart {
+    items: CartUser[];
+    expirationDate: number | null;
+}
+
 export interface SidebarProps extends Dishes {
     isSidebarOpened: boolean;
     setIsSidebarOpened: React.Dispatch<React.SetStateAction<boolean>>;

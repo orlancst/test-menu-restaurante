@@ -28,3 +28,10 @@ export const adaptCartReq = (cart:Array<CartUser>) => {
         price: item.price,
     } ));
 }
+
+export const expireCart = (days:number = 0, hours: number = 0, minutes:number = 0, seconds: number = 0):number => {
+
+    const miliseconds = (days * 24 * 60 * 60 * 1000) + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
+
+    return Date.now() + miliseconds;
+}

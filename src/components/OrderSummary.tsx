@@ -68,7 +68,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                 },
                 body: JSON.stringify({
                     "deliveryPoint": deliveryPoint,
-                    "addedItems": adaptCartReq(cart),
+                    "addedItems": adaptCartReq(cart.items),
                     "totalAmount": cartTotalPrice()
                 })
             })
@@ -96,7 +96,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
     }
 
     useEffect(() => {
-        if (cart.length === 0) {
+        if (cart.items.length === 0) {
             navigate(`/${search}`)
         }
 
@@ -150,7 +150,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                     </div>
 
                     {
-                        cart.map((item) => {
+                        cart.items.map((item) => {
 
                             return (
                                 <div key={item.name} className="flex flex-row justify-between items-start border-b pb-1 mb-2">
@@ -174,7 +174,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                 </div>
 
                 {
-                    cart.length > 0 &&
+                    cart.items.length > 0 &&
                     <div className="flex flex-row justify-center gap-x-2">
                         <button className={`btn btn-sm ${theme === 'carpediem' ? 'rounded-xl bg-primary text-secondary' : 'rounded-full px-6 bg-primary text-secondary'} font-bold`} onClick={handleSubmitOrder}>Confirmar pedido</button>
                     </div>

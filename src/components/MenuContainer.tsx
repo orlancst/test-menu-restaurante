@@ -15,6 +15,7 @@ import UnavailableAccess from "./UnavailableAccess"
 import PlusIcon from '../assets/svg/PlusIcon'
 
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
+const $INCLUDED_CAT_ID: number = Number(import.meta.env.VITE_INCLUDED_CATEGORY_ID);
 
 interface MenuContainerProps {
     theme: string;
@@ -23,7 +24,7 @@ interface MenuContainerProps {
 
 const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
-    const { cart, addToCart, cartQuantity, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
+    const { cart, addToCart, cartQuantity, quantityLimit, freeQuantityLimit, freeCartQuantity, emptyCart } = useContext(CartContext);
     const isCartEmpty = cartQuantity() > 0 ? false : true;
     const [dishes, setDishes] = useState<Dish[]>([]);
     const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
@@ -42,17 +43,20 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
             localStorage.removeItem('orderId')
         }
 
+        if (cart.expirationDate && Date.now() >= cart.expirationDate) {
+            emptyCart()
+            
+        }
+        
+
     }, [])
-
-
 
     useEffect(() => {
 
         const handleClickFuera = (event: MouseEvent) => {
             if (quantityCounterVisibleRef.current && !quantityCounterVisibleRef.current.contains(event.target as Node)) {
 
-                setIsQCVShown(null)
-                setTimeout(() => setIsQuantityCounterVisible(null), 300);
+                closeQuantityCounter();
 
             }
         }
@@ -87,22 +91,47 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
     }
 
+    const closeQuantityCounter = () => {
+        setIsQCVShown(null)
+        setTimeout(() => setIsQuantityCounterVisible(null), 300);
+    }
+
     const handleAddButton = (dish: Dish, cant: number, comment: string, addMore: boolean, execAddToCart: boolean, cantOnCart: number | undefined) => {
 
         if (isQuantityCounterVisible === dish.id) {
-            setIsQCVShown(null)
-            setTimeout(() => setIsQuantityCounterVisible(null), 300);
+            closeQuantityCounter();
 
         } else {
-            setIsQuantityCounterVisible(dish.id)
+            //esperar a que el anterior se cierre para abrir al nuevo
 
-            setTimeout(() => {
-                setIsQCVShown(dish.id)
+            if (isQuantityCounterVisible) {
+                closeQuantityCounter()
+                setTimeout(() => {
+                    setIsQuantityCounterVisible(dish.id)
 
-                if (execAddToCart && !cantOnCart) {
-                    addToCart(dish, cant, comment, addMore)
-                }
-            }, 10);
+                    setTimeout(() => {
+                        setIsQCVShown(dish.id)
+        
+                        if (execAddToCart && !cantOnCart) {
+                            addToCart(dish, cant, comment, addMore)
+                        }
+                    }, 10);
+                }, 300);
+            } else {
+                setIsQuantityCounterVisible(dish.id)
+    
+                setTimeout(() => {
+                    setIsQCVShown(dish.id)
+    
+                    if (execAddToCart && !cantOnCart) {
+                        addToCart(dish, cant, comment, addMore)
+                    }
+                }, 10);
+
+            }
+
+            //setIsQCVShown(null)
+
         }
 
         // setIsQuantityCounterVisible((prev) => (prev === dish.id ? null : dish.id))
@@ -137,10 +166,10 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
                 {
                     dishes?.map((dish, index) => {
                         const showCat = index === 0 || dish.categoryName !== dishes[index - 1].categoryName ? true : false;
-                        const isIncluded = dish.categoryId === 1 ? true : false;
+                        const isIncluded = dish.categoryId === $INCLUDED_CAT_ID ? true : false;
 
                         //validar si el producto seleccionado alcanzó el tope permitido para agregar al carrito
-                        const isOnCart = cart.find((it) => it.id === dish.id)
+                        const isOnCart = (cart.items || []).find((it) => it.id === dish.id)
                         const maxSelected = isOnCart && isOnCart.cantidad === quantityLimit
 
                         return (

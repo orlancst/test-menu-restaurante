@@ -60,14 +60,14 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
 
 
                         {
-                            cart.length === 0 &&
+                            cart.items.length === 0 &&
                             <div className="text-center">
                                 <span className="text-sm font-semibold">Tu carrito está vacío.</span>
                             </div>
                         }
 
                         {
-                            cart.map((item) => {
+                            cart.items.map((item) => {
 
                                 const isIncluded = item.categoryId !== 7 ? false : true;
 
@@ -113,7 +113,7 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                     </div>
 
                     {
-                        cart.length > 0 ?
+                        cart.items.length > 0 ?
                             <>
 
                                 <div className='text-center py-5'>
@@ -130,7 +130,7 @@ const Cart: React.FC<CartProps> = ({ theme }) => {
                 </div>
             </div>
 
-            <ModifyComment idProd={idProd} cart={cart} isModifyCommentsOpened={isModifyCommentsOpened} setIsModifyCommentsOpened={setIsModifyCommentsOpened} handleAddToCart={addToCart} theme={theme} />
+            <ModifyComment idProd={idProd} cart={cart.items} isModifyCommentsOpened={isModifyCommentsOpened} setIsModifyCommentsOpened={setIsModifyCommentsOpened} handleAddToCart={addToCart} theme={theme} />
         </>
     )
 }
