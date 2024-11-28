@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import { Dish, CartUser, FullCart } from "../types";
-import { expireCart } from "../helpers/utils";
 
 interface MiContexto {
     cart: FullCart;
@@ -11,6 +10,7 @@ interface MiContexto {
     freeQuantityLimit: number;
     freeCartQuantity: () => number;
     modifyDishQuantityOnCart: (dishId: number, add: boolean, isIncluded: boolean) => boolean;
+    setCartHotelRegistryNumber: (hotelRegNum: number) => void;
     emptyCart: () => void;
 }
 
@@ -19,7 +19,7 @@ interface CartProviderProps {
 } 
 
 export const CartContext = createContext<MiContexto>({
-    cart: {items: [], expirationDate: null},
+    cart: {items: [], hotelRegistryNumber: null},
     addToCart: () => { },
     cartQuantity: () => 0,
     cartTotalPrice: () => 0,
@@ -27,10 +27,11 @@ export const CartContext = createContext<MiContexto>({
     freeQuantityLimit: 2,
     freeCartQuantity: () => 0,
     modifyDishQuantityOnCart: () => false,
+    setCartHotelRegistryNumber: () => 0,
     emptyCart: () => { },
 });
 
-const $cart: FullCart = JSON.parse(localStorage.getItem("cart") || '{"items": [], "expirationDate": null}') as FullCart
+const $cart: FullCart = JSON.parse(localStorage.getItem("cart") || '{"items": [], "hotelRegistryNumber": null}') as FullCart
 //const $cart: CartUser[] = JSON.parse(localStorage.getItem("cart") || '[]') as CartUser[]
 const $INCLUDED_CAT_ID: number = Number(import.meta.env.VITE_INCLUDED_CATEGORY_ID)
 
@@ -69,7 +70,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         setCart({
             items: newItems,
-            expirationDate: cart.expirationDate || expireCart(1, 0, 0, 0),
+            hotelRegistryNumber: cart.hotelRegistryNumber || null,
         })
         
     }
@@ -78,7 +79,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         const uCart = [...cart.items]
         const auxCart = uCart.find((prod) => prod.id === dishId)
-        let exp = cart.expirationDate
 
         if (auxCart) {
             if (add) {
@@ -97,8 +97,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
                     const index = uCart.indexOf(auxCart)
                     uCart.splice(index, 1)
                 }
-
-                exp = uCart.length > 0 ? cart.expirationDate : null;
                 
             }
 
@@ -106,15 +104,23 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
 
         setCart({
             items: uCart,
-            expirationDate: exp,
+            hotelRegistryNumber: cart.hotelRegistryNumber || null,
         })
         return true;
 
     }
 
+    const setCartHotelRegistryNumber = (hotelRegNum: number) => {
+        setCart({
+            items: [],
+            hotelRegistryNumber: hotelRegNum
+        })
+    }
+
     const emptyCart = () => {
-        setCart({ items: [], expirationDate: null });
-        localStorage.removeItem("cart")
+        
+        setCart({ items: [], hotelRegistryNumber: null });
+        //localStorage.removeItem("cart")
     }
 
     const freeCartQuantity = ():number => {
@@ -145,6 +151,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             freeQuantityLimit,
             freeCartQuantity,
             modifyDishQuantityOnCart,
+            setCartHotelRegistryNumber,
             emptyCart
             }}>
 

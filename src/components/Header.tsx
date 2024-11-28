@@ -3,13 +3,9 @@ import LogoByHoursAstor from "../assets/img/ByHoursAstor.png"
 import LogoByHoursChiquinquira from "../assets/img/ByHoursChiquinquira.png"
 import LogoByHoursLasAmericas from "../assets/img/ByHoursLasAmericas.png"
 import LogoCarpeDiem from "../assets/img/CarpeDiem.png"
+import { ThemeAndHQ } from "../types"
 
-interface HeaderProps {
-  theme: string;
-  hq: string;
-}
-
-const Header: React.FC<HeaderProps> = ({ theme, hq }) => {
+const Header: React.FC<ThemeAndHQ> = ({ theme, hq }) => {
   return (
     <div className="flex flex-col items-center bg-neutral py-3">
       <img src={

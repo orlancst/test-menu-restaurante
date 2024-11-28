@@ -1,11 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import XmarkIcon from "../assets/svg/XmarkIcon"
+import { Theme } from "../types";
 
-interface ForbidenAccessProps {
-    theme: string;
-}
-
-const ForbidenAccess: React.FC<ForbidenAccessProps> = ({ theme }) => {
+const ForbidenAccess: React.FC<Theme> = ({ theme }) => {
 
     const navigate = useNavigate()
     const { search } = useLocation()

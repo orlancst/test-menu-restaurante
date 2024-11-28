@@ -32,6 +32,9 @@ export const validateAccess = (branch: string, room: string, theme: string, endp
             if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`)
             const result = await response.json()
             list = result
+
+            console.log(list);
+            
         } catch (err) {
             const error = err as ErrorResponse;
             setError(error.message || 'Hubo un problema')

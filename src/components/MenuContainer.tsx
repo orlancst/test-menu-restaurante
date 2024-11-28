@@ -7,7 +7,7 @@ import Loading from "./Loading"
 import QuantityCounter from "./QuantityCounter"
 import { useContext, useEffect, useRef, useState } from "react"
 import { shortenParagraph } from "../helpers/utils"
-import { Dish } from "../types";
+import { Dish, ThemeAndHQ } from "../types";
 import { CartContext } from "../context/CartContext"
 import { validateAccess } from "../hooks/validateAccess"
 import { findDish } from "../hooks/findDish"
@@ -17,14 +17,9 @@ import PlusIcon from '../assets/svg/PlusIcon'
 const $API_KEY: string = import.meta.env.VITE_API_KEY;
 const $INCLUDED_CAT_ID: number = Number(import.meta.env.VITE_INCLUDED_CATEGORY_ID);
 
-interface MenuContainerProps {
-    theme: string;
-    hq: string;
-}
+const MenuContainer: React.FC<ThemeAndHQ> = ({ theme, hq }) => {
 
-const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
-
-    const { cart, addToCart, cartQuantity, quantityLimit, freeQuantityLimit, freeCartQuantity, emptyCart } = useContext(CartContext);
+    const { cart, addToCart, cartQuantity, quantityLimit, freeQuantityLimit, freeCartQuantity, setCartHotelRegistryNumber, emptyCart } = useContext(CartContext);
     const isCartEmpty = cartQuantity() > 0 ? false : true;
     const [dishes, setDishes] = useState<Dish[]>([]);
     const [isDishDetailOpened, setIsDishDetailOpened] = useState(false);
@@ -42,12 +37,6 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
         if (localStorage.getItem('orderId')) {
             localStorage.removeItem('orderId')
         }
-
-        if (cart.expirationDate && Date.now() >= cart.expirationDate) {
-            emptyCart()
-            
-        }
-        
 
     }, [])
 
@@ -72,9 +61,17 @@ const MenuContainer: React.FC<MenuContainerProps> = ({ theme, hq }) => {
 
         if (data) {
 
-            if (data.length > 0) {
+            if (data.products.length > 0) {
 
-                setDishes(data)
+                setDishes(data.products)
+
+                if (!cart.hotelRegistryNumber) {
+                    setCartHotelRegistryNumber(data.hotelRegistryNumber)
+                } else if (cart.hotelRegistryNumber !== data.hotelRegistryNumber) {
+                    emptyCart()
+                    setCartHotelRegistryNumber(data.hotelRegistryNumber)
+                }
+
 
             }
 

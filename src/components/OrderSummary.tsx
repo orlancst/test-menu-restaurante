@@ -69,7 +69,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                 body: JSON.stringify({
                     "deliveryPoint": deliveryPoint,
                     "addedItems": adaptCartReq(cart.items),
-                    "totalAmount": cartTotalPrice()
+                    "totalAmount": cartTotalPrice(),
+                    "hotelRegistryNumber": cart.hotelRegistryNumber
                 })
             })
             const dataReceived = await response.json()

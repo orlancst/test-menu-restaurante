@@ -2,11 +2,8 @@ import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { flushSync } from "react-dom";
+import { CartSummaryProps } from "../types";
 
-interface CartSummaryProps {
-  theme: string;
-  cantidad: number;
-}
 
 const CartSummary: React.FC<CartSummaryProps> = ({theme, cantidad}) => {
   

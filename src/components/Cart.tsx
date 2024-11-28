@@ -8,12 +8,10 @@ import { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import ModifyComment from './ModifyComment';
 import { flushSync } from 'react-dom'
+import { Theme } from '../types'
 
-interface CartProps {
-    theme: string;
-}
 
-const Cart: React.FC<CartProps> = ({ theme }) => {
+const Cart: React.FC<Theme> = ({ theme }) => {
 
     const { cart, cartTotalPrice, modifyDishQuantityOnCart, addToCart } = useContext(CartContext);
 

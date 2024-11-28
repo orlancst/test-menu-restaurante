@@ -1,10 +1,7 @@
 import XmarkIcon from "../assets/svg/XmarkIcon"
+import { Theme } from '../types'
 
-interface UnavailableAccessProps {
-    theme: string;
-}
-
-const UnavailableAccess: React.FC<UnavailableAccessProps> = ({ theme }) => {
+const UnavailableAccess: React.FC<Theme> = ({ theme }) => {
     return (
         <div className="flex flex-col justify-center mx-8 h-lvh">
             <div className="flex justify-center mb-3">

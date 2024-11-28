@@ -1,25 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { Dish } from '../types';
+import { Dish, DishDetailProps } from '../types';
 import { CartContext } from '../context/CartContext';
 import PlusIcon from '../assets/svg/PlusIcon'
 import MinusIcon from '../assets/svg/MinusIcon'
 
-interface DrawerProps {
-    dish: Dish | null;
-    loadDish: boolean;
-    onDishErr: string | null;
-    isDishDetailOpened: boolean;
-    setIsDishDetailOpened: React.Dispatch<React.SetStateAction<boolean>>;
-    handleAddToCart: (dish: Dish, cant: number, comment: string, addMore: boolean) => void;
-    disableButton: boolean;
-    theme: string;
-}
 
 const $INCLUDED_CAT_ID: number = import.meta.env.INCLUDED_CATEGORY_ID;
 
-const DishDetail: React.FC<DrawerProps> = (props) => {
+const DishDetail: React.FC<DishDetailProps> = (props) => {
 
     const { dish, loadDish, onDishErr, isDishDetailOpened, setIsDishDetailOpened, handleAddToCart, disableButton, theme } = props
     //const [dish, setDish] = useState<Dish>({} as Dish)
@@ -27,7 +17,7 @@ const DishDetail: React.FC<DrawerProps> = (props) => {
     const [price, setPrice] = useState(0);
     const [commentValue, setCommentValue] = useState("");
 
-    const { cart, quantityLimit, freeQuantityLimit, freeCartQuantity } = useContext(CartContext);
+    const { cart, quantityLimit, freeQuantityLimit } = useContext(CartContext);
 
     const isDishIncluded: boolean = dish?.categoryId === $INCLUDED_CAT_ID ? true : false;
  
