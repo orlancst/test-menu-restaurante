@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { CartUser } from '../types';
+import { CartUser, ModifyAlert } from '../types';
 
-interface ModifyCommentProps {
-    idProd: number;
-    cart: CartUser[];
-    isModifyCommentsOpened: boolean;
-    setIsModifyCommentsOpened: React.Dispatch<React.SetStateAction<boolean>>;
-    handleAddToCart: (dish: CartUser, cant: number, comment: string, addMore: boolean) => void;
-    theme: string;
-}
-
-const ModifyComment: React.FC<ModifyCommentProps> = ({ idProd, cart, isModifyCommentsOpened, setIsModifyCommentsOpened, handleAddToCart, theme }) => {
+const ModifyComment: React.FC<ModifyAlert> = ({ idProd, cart, isModifyCommentsOpened, setIsModifyCommentsOpened, handleAddToCart, theme }) => {
 
     const [commentValue, setCommentValue] = useState("");
     const [dish, setDish] = useState<CartUser>({} as CartUser)
@@ -80,7 +71,7 @@ const ModifyComment: React.FC<ModifyCommentProps> = ({ idProd, cart, isModifyCom
                     {dish.description}
                 </p>
                 <span className='font-semibold text-secondary text-lg mt-2'>
-                    $ {dish.price !== undefined && dish.price.toLocaleString('es-ES')}
+                    $ {dish.price !== undefined && dish.price.toLocaleString('es-CO')}
                 </span>
 
                 <hr className='h-0 border-t-2 my-2' />

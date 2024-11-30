@@ -38,9 +38,12 @@ function App() {
     if (objEstablishment) {
       if (theme && (theme as string === '1' || theme as string === '2')) {
         branch = objEstablishment.line[theme as number].toLowerCase().replace(" ", "")
-        setTheme(branch)
-
+      } else if (window.location.hostname.includes('byhours') || window.location.hostname.includes('carpediem')) {
+        branch = window.location.hostname.includes('carpediem') ? 'carpediem' : 'byhours'
       }
+
+      setTheme(branch)
+
       setHq(objEstablishment.name)
 
       setDeliveryPoint({
@@ -93,7 +96,7 @@ function App() {
             <Route path='/cart' element={<Cart theme={theme} />} />
             <Route path='/verify' element={<Verify theme={theme} setAccessKey={setAccessKey} />} />
             <Route path='/order-summary' element={<OrderSummary theme={theme} accessKey={accessKey} setAccessKey={setAccessKey} deliveryPoint={deliveryPoint} />} />
-            <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} setAccessKey={setAccessKey} />} />
+            <Route path='/order-confirmed' element={<OrderConfirmed theme={theme} />} />
           </Routes>
         </BrowserRouter>
       </CartProvider>

@@ -61,6 +61,9 @@ const MenuContainer: React.FC<ThemeAndHQ> = ({ theme, hq }) => {
 
         if (data) {
 
+            //console.log(data);
+            
+
             if (data.products.length > 0) {
 
                 setDishes(data.products)
@@ -131,13 +134,6 @@ const MenuContainer: React.FC<ThemeAndHQ> = ({ theme, hq }) => {
 
         }
 
-        // setIsQuantityCounterVisible((prev) => (prev === dish.id ? null : dish.id))
-
-        // if (execAddToCart && !cantOnCart) {
-        //     addToCart(dish, cant, comment, addMore)
-
-        // }
-
     }
 
     const handleOpenSidebar = () => {
@@ -184,7 +180,7 @@ const MenuContainer: React.FC<ThemeAndHQ> = ({ theme, hq }) => {
 
 
                                 <div className="relative flex flex-row justify-between mb-3">
-                                    <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-ES')}</span>
+                                    <span className="font-semibold text-xl text-secondary">$ {dish.price.toLocaleString('es-CO')}</span>
 
                                     {
                                         (!isIncluded) ?

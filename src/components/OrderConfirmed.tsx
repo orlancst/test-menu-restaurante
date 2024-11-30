@@ -7,10 +7,9 @@ import { CartContext } from "../context/CartContext"
 
 interface OrderConfirmedProps {
     theme: string;
-    setAccessKey: React.Dispatch<React.SetStateAction<string>>
 }
 
-const OrderConfirmed: React.FC<OrderConfirmedProps> = ({ theme, setAccessKey }) => {
+const OrderConfirmed: React.FC<OrderConfirmedProps> = ({ theme }) => {
 
     const [isSurveySubmitted, setIsSurveySubmitted] = useState(false)
     const [loader, setLoader] = useState<boolean>(false)

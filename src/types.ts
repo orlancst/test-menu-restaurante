@@ -86,3 +86,17 @@ export type DishDetailProps = {
 export type LoaderMaskProps = {
     loaderMsj: string;
 }
+
+export type Alert = {
+    message:string;
+    theme: string;
+}
+
+export type ModifyAlert = {
+    idProd: number;
+    cart: CartUser[];
+    isModifyCommentsOpened: boolean;
+    setIsModifyCommentsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+    handleAddToCart: (dish: CartUser, cant: number, comment: string, addMore: boolean) => void;
+    theme: string;
+}

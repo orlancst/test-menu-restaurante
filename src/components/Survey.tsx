@@ -18,7 +18,7 @@ interface SurveyProps {
 
 const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoader, setLoaderMsj}) => {
 
-    const { data, error, loading } = getSurvey($API_KEY)
+    const { data, error } = getSurvey($API_KEY)
 
     const [questions, setQuestions] = useState<Question[]>([])
     const [ans, setAns] = useState<Answers[]>([]);
@@ -69,7 +69,7 @@ const Survey: React.FC<SurveyProps> = ({theme, orderId, setIsOrderSumbit, setLoa
                 throw new Error('Hubo un problema con la petición al server.')
             }
 
-            const dataReceived = await response.json()
+            //const dataReceived = await response.json()
             setIsOrderSumbit(true)
             localStorage.clear()
 

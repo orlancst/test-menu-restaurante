@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 interface QueryData {
     data: any;
-    loading: boolean;
+    //loading: boolean;
     error: string | null;
 }
 
@@ -15,7 +15,7 @@ interface ErrorResponse {
 export const getSurvey = (endpointUrl: string): QueryData => {
 
     const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(true)
+    //const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
     const apiCall = async () => {
@@ -32,7 +32,7 @@ export const getSurvey = (endpointUrl: string): QueryData => {
             const error = err as ErrorResponse;
             setError(error.message || 'Hubo un problema')
         } finally {
-            setLoading(false);
+            //setLoading(false);
             setData(list)
         }
     }
@@ -43,5 +43,5 @@ export const getSurvey = (endpointUrl: string): QueryData => {
 
     }, [endpointUrl])
 
-    return { data, error, loading }
+    return { data, error }
 }

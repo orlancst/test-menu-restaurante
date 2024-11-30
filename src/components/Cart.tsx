@@ -49,7 +49,7 @@ const Cart: React.FC<Theme> = ({ theme }) => {
                     </button>
                     <div className="flex flex-col">
                         <span className="text-sm font-light">Tu carrito</span>
-                        <span className="text-xl font-bold">$ {cartTotalPrice().toLocaleString('es-ES')}</span>
+                        <span className="text-xl font-bold">$ {cartTotalPrice().toLocaleString('es-CO')}</span>
                     </div>
                 </div>
                 <div className={`${theme === 'carpediem' ? 'bg-accent' : 'bg-neutral'} grow flex flex-col justify-between`}>
@@ -74,7 +74,7 @@ const Cart: React.FC<Theme> = ({ theme }) => {
                                         <div className='flex justify-between items-end'>
                                             <div className='flex flex-col'>
                                                 <span className='font-bold'>{item.name}</span>
-                                                <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
+                                                <span className='font-semibold mt-1'>$ {(item.price * item.cantidad).toLocaleString('es-CO')}</span>
                                                 {
                                                     item.comentario !== '' ? (
                                                         <>

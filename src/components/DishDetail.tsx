@@ -133,7 +133,7 @@ const DishDetail: React.FC<DishDetailProps> = (props) => {
                                 {dish?.description}
                             </p>
                             <span className='font-semibold text-secondary text-lg mt-2'>
-                                $ {dish?.price !== undefined && dish.price.toLocaleString('es-ES')}
+                                $ {dish?.price !== undefined && dish.price.toLocaleString('es-CO')}
                             </span>
 
                             <hr className='h-0 border-t-2 my-2' />
@@ -157,7 +157,7 @@ const DishDetail: React.FC<DishDetailProps> = (props) => {
                                                 </button>
                                             </div>
                                             <button className={`${theme === 'carpediem' ? 'rounded-xl px-4 bg-secondary text-primary font-semibold' : 'rounded-full px-6 bg-primary text-secondary font-bold'} text-sm leading-none h-9`} onClick={handleAgregarAlCarrito}>Agregar
-                                                 $ {price.toLocaleString('es-ES')}</button>
+                                                 $ {price.toLocaleString('es-CO')}</button>
                                         </>
                                         :
                                         <>

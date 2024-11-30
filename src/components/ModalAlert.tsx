@@ -1,10 +1,6 @@
+import { Alert } from "../types"
 
-interface ModalAlertProps {
-    message:string;
-    theme: string;
-}
-
-export const ModalAlert: React.FC<ModalAlertProps> = ({message, theme}) => {
+export const ModalAlert: React.FC<Alert> = ({message, theme}) => {
     return (
         <dialog id="modalInvalidData" className="modal backdrop:bg-[#0000009c]">
             <div className="modal-box bg-neutral">

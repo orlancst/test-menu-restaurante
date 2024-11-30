@@ -159,7 +159,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                                         {item.name}
                                     </span>
                                     <span className="mx-3">{item.cantidad}</span>
-                                    <span className="w-24 text-right font-bold">$ {(item.price * item.cantidad).toLocaleString('es-ES')}</span>
+                                    <span className="w-24 text-right font-bold">$ {(item.price * item.cantidad).toLocaleString('es-CO')}</span>
                                 </div>
                             )
                         })
@@ -169,7 +169,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ theme, accessKey, setAccess
                         <span className="font-light">
                             Total
                         </span>
-                        <span className="text-right font-bold text-primary">$ {cartTotalPrice().toLocaleString('es-ES')}</span>
+                        <span className="text-right font-bold text-primary">$ {cartTotalPrice().toLocaleString('es-CO')}</span>
                     </div>
 
                 </div>
