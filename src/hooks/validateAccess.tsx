@@ -32,6 +32,11 @@ export const validateAccess = (branch: string, room: string, theme: string, endp
             if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`)
             const result = await response.json()
             list = result
+
+            const resp2 = await fetch(import.meta.env.VITE_FAKE_API)
+            const resul2 = await resp2.json()
+            console.log(resul2);
+            
             
         } catch (err) {
             const error = err as ErrorResponse;
